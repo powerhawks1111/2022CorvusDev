@@ -20,8 +20,7 @@ import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class SwerveModule {
-        private static final double kWheelRadius = 0.1016;
-        private static final int kEncoderResolution = 4096;
+        private static final double kWheelRadius = (0.1016 / 2) / 8.16; // 0.1016 M wheel diameter (4"), divide by 2 for radius, divide by 8.16 for gear ratio of swerve module
 
         private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
         private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -84,7 +83,7 @@ public class SwerveModule {
          */
         public void setDesiredState(SwerveModuleState desiredState) {
             // Optimize the reference state to avoid spinning further than 90 degrees
-            SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_TurnPWMEncoder.get()));
+            SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_TurnPWMEncoder.get() * 2 * Math.PI));
 
             // Calculate the drive output from the drive PID controller.
             final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
@@ -92,6 +91,7 @@ public class SwerveModule {
             final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
             // Calculate the turning motor output from the turning PID controller.
+            //TODO: Can we use our own P error control here?
             final double turnOutput = m_turningPIDController.calculate(m_TurnPWMEncoder.get(), state.angle.getRadians());
 
             final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
