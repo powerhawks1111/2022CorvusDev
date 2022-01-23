@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class SwerveModule {
-        private static final double kWheelRadius = (0.1016 / 2) / 8.16; // 0.1016 M wheel diameter (4"), divide by 2 for radius, divide by 8.16 for gear ratio of swerve module
+        private static final double kWheelDiameter = 0.1016; // 0.1016 M wheel diameter (4")
+        private static final double kWheelCircumference = Math.PI *kWheelDiameter;
+        private static final double rpmToVelocityScaler = kWheelCircumference / 8.16; //SDS Mk3 standard gear ratio from motor to wheel
 
         private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
         private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -30,7 +32,8 @@ public class SwerveModule {
 
         private final RelativeEncoder m_driveEncoder;
         private final DigitalInput m_TurnEncoderInput;
-        private final DutyCycleEncoder m_TurnPWMEncoder;
+        private final DutyCycle m_TurnPWMEncoder;
+        private double turnEncoderOffset;
 
         // Gains are for example purposes only - must be determined for your own robot!
         private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
@@ -49,18 +52,21 @@ public class SwerveModule {
          * @param turningMotorChannel CAN ID for the turning motor.
          * @param driveEncoder DIO input for the drive encoder channel A
          * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
+         * @param turnOffset offset from 0 to 1 for the home position of the encoder
          */
-        public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel) {
+        public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel, double turnOffset) {
             // can spark max motor controller objects
             m_driveMotor = new CANSparkMax(driveMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
             m_turningMotor = new CANSparkMax(turningMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
 
             //spark max built-in encoder
             m_driveEncoder = m_driveMotor.getEncoder();
+            m_driveEncoder.setVelocityConversionFactor(rpmToVelocityScaler);
 
             //PWM encoder from CTRE mag encoders
             m_TurnEncoderInput = new DigitalInput(turnEncoderPWMChannel);
-            m_TurnPWMEncoder = new DutyCycleEncoder(m_TurnEncoderInput);
+            m_TurnPWMEncoder = new DutyCycle(m_TurnEncoderInput);
+            turnEncoderOffset = turnOffset;
 
             // Limit the PID Controller's input range between -pi and pi and set the input
             // to be continuous.
@@ -73,7 +79,8 @@ public class SwerveModule {
          * @return The current state of the module.
          */
         public SwerveModuleState getState() {
-            return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m_TurnPWMEncoder.get()));
+            //the getVelocity() function normally returns RPM but is scaled in the SwerveModule constructor to return actual wheel speed
+            return new SwerveModuleState( m_driveEncoder.getVelocity(), new Rotation2d(getTurnEncoderRadians()) );
         }
 
         /**
@@ -83,20 +90,49 @@ public class SwerveModule {
          */
         public void setDesiredState(SwerveModuleState desiredState) {
             // Optimize the reference state to avoid spinning further than 90 degrees
-            SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_TurnPWMEncoder.get() * 2 * Math.PI));
+            SwerveModuleState state = SwerveModuleState.optimize( desiredState, new Rotation2d(getTurnEncoderRadians()) );
 
             // Calculate the drive output from the drive PID controller.
-            final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+            final double driveOutput = m_drivePIDController.calculate( m_driveEncoder.getVelocity(), state.speedMetersPerSecond );
 
-            final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+            
 
-            // Calculate the turning motor output from the turning PID controller.
-            //TODO: Can we use our own P error control here?
-            final double turnOutput = m_turningPIDController.calculate(m_TurnPWMEncoder.get(), state.angle.getRadians());
+            final double signedAngleDifference = closestAngleCalculator(getTurnEncoderRadians(), state.angle.getRadians());
+            double rotateMotorPercentPower = signedAngleDifference / (Math.PI); //proportion error control
 
-            final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+            m_driveMotor.setVoltage((driveOutput / Drivetrain.kMaxSpeed) * Math.cos(rotateMotorPercentPower));
+            m_turningMotor.setVoltage(rotateMotorPercentPower);
+        }
 
-            m_driveMotor.setVoltage(driveOutput + driveFeedforward);
-            m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+        /**
+         * Applies the absolute encoder offset value and converts range
+         * from 0-1 to 0-2 pi radians
+         * @return Angle of the absolute encoder in radians
+         */
+        private double getTurnEncoderRadians() {
+            double appliedOffset = (m_TurnPWMEncoder.getOutput() - turnEncoderOffset) % 1;
+            return appliedOffset * 2 * Math.PI;
+        }
+
+        /**
+         * Calculates the closest angle and direction between two points on a circle.
+         * @param currentAngle <ul><li>where you currently are</ul></li>
+         * @param desiredAngle <ul><li>where you want to end up</ul></li>
+         * @return <ul><li>signed double of the angle (rad) between the two points</ul></li>
+         */
+        public double closestAngleCalculator(double currentAngle, double desiredAngle) {
+            double signedDiff = 0.0;
+            double rawDiff = currentAngle > desiredAngle ? currentAngle - desiredAngle : desiredAngle - currentAngle; // find the positive raw distance between the angles
+            double modDiff = rawDiff % (2 * Math.PI); // constrain the difference to a full circle
+
+            if (modDiff > Math.PI) { // if the angle is greater than half a rotation, go backwards
+                signedDiff = ((2 * Math.PI) - modDiff); //full circle minus the angle
+                if (desiredAngle > currentAngle) signedDiff = signedDiff * -1; // get the direction that was lost calculating raw diff
+            }
+            else {
+                signedDiff = modDiff;
+                if (currentAngle > desiredAngle) signedDiff = signedDiff * -1;
+            }
+            return signedDiff;
         }
 }
