@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -66,5 +67,13 @@ public class Drivetrain {
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
         m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+    }
+
+    /**
+     * Gives the current position and rotation of the robot (meters) based on the wheel odometry
+     * @return Pose2d of current robot position
+     */
+    public Pose2d getCurrentPose2d() {
+        return m_odometry.getPoseMeters();
     }
 }
