@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,20 +19,20 @@ public class Drivetrain {
     public static final double kMaxSpeed = 3.68; // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(0.538, 0.538);
-    private final Translation2d m_frontRightLocation = new Translation2d(0.538, -0.538);
-    private final Translation2d m_backLeftLocation = new Translation2d(-0.538, 0.538);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.538, -0.538);
+    private final Translation2d m_frontLeftLocation = new Translation2d(-0.538,  0.538);
+    private final Translation2d m_frontRightLocation = new Translation2d(0.538,  0.538);
+    private final Translation2d m_backLeftLocation = new Translation2d( -0.538, -0.538);
+    private final Translation2d m_backRightLocation = new Translation2d( 0.538, -0.538);
 
     // private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0.8174);
     // private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.1154);
     // private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.1755);
     // private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.8171);
 
-    private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0);
-    private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0);
-    private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0);
-    private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0);
+    private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0.80625);
+    private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.40802);
+    private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.06178);
+    private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.62248);
 
     private final AnalogGyro m_gyro = new AnalogGyro(0);
     
@@ -56,7 +57,8 @@ public class Drivetrain {
      */
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(m_navx.getAngle() * (Math.PI / 180))): new ChassisSpeeds(xSpeed, ySpeed, rot));
+        var robotRotation = new Rotation2d(m_navx.getAngle() * (Math.PI / 180));
+        var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);

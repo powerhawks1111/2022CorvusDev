@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
     }
 
     private void driveWithJoystick(boolean fieldRelative) {
-        final var xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_JoystickLeft.getRawAxis(0), 0.05)) * Drivetrain.kMaxSpeed;
-        final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_JoystickLeft.getRawAxis(1), 0.05)) * Drivetrain.kMaxSpeed;
-        final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(m_JoystickRight.getRawAxis(0), 0.05)) * Drivetrain.kMaxAngularSpeed;
+        final var xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(-m_JoystickLeft.getRawAxis(0), 0.05)) * Drivetrain.kMaxSpeed;
+        final var ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-m_JoystickLeft.getRawAxis(1), 0.05)) * Drivetrain.kMaxSpeed;
+        final var rot = m_rotLimiter.calculate(MathUtil.applyDeadband(-m_JoystickRight.getRawAxis(0), 0.05)) * Drivetrain.kMaxAngularSpeed;
 
         m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
     }

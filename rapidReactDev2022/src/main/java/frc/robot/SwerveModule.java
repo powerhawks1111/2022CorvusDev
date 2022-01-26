@@ -100,8 +100,8 @@ public class SwerveModule {
             final double signedAngleDifference = closestAngleCalculator(getTurnEncoderRadians(), state.angle.getRadians());
             double rotateMotorPercentPower = signedAngleDifference / (Math.PI); //proportion error control
 
-            m_driveMotor.setVoltage((driveOutput / Drivetrain.kMaxSpeed) * Math.cos(rotateMotorPercentPower));
-            m_turningMotor.setVoltage(rotateMotorPercentPower);
+            m_driveMotor.set((state.speedMetersPerSecond / Drivetrain.kMaxSpeed) * Math.cos(rotateMotorPercentPower));
+            m_turningMotor.set(rotateMotorPercentPower);
         }
 
         /**
