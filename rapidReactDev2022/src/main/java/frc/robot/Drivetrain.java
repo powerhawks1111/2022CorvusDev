@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import com.kauailabs.navx.frc.AHRS; 
 
 /** Represents a swerve drive style drivetrain. */
@@ -33,18 +32,17 @@ public class Drivetrain {
     private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.40802);
     private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.06178);
     private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.62248);
-
-    private final AnalogGyro m_gyro = new AnalogGyro(0);
     
     private final AHRS m_navx;
 
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-    private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
+    private final SwerveDriveOdometry m_odometry;
 
     //Constructor
     public Drivetrain(AHRS navx) {
         m_navx = navx;
+        m_odometry = new SwerveDriveOdometry(m_kinematics, m_navx.getRotation2d());
     }
 
     /**
@@ -57,7 +55,7 @@ public class Drivetrain {
      */
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        var robotRotation = new Rotation2d(m_navx.getAngle() * (Math.PI / 180));
+        Rotation2d robotRotation = m_navx.getRotation2d();
         var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -68,7 +66,7 @@ public class Drivetrain {
 
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
-        m_odometry.update(m_gyro.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+        m_odometry.update(m_navx.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
     }
 
     /**
