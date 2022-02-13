@@ -1,6 +1,8 @@
-package frc.robot;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.MoveToSubsystem;
+import frc.robot.variables.Objects;
 
 public class MoveToCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateTield", "PMD.SingularField" })

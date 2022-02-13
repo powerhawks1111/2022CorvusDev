@@ -1,6 +1,7 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.variables.Objects;
 
 public class MoveToSubsystem extends SubsystemBase{
     double[] componentSpeeds = {0,0};

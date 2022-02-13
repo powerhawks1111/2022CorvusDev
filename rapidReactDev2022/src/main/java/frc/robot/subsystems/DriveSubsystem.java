@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.kauailabs.navx.frc.AHRS; 
-import frc.robot.Objects;
+import com.kauailabs.navx.frc.AHRS;
+
+import frc.robot.variables.Objects;
+
 import org.photonvision.PhotonCamera;
 
-public class Drive {
+public class DriveSubsystem {
     private final XboxController m_controller = new XboxController(0);
     private final Joystick m_JoystickLeft = new Joystick(0);
     private final Joystick m_JoystickRight = new Joystick(1);
