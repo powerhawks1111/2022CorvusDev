@@ -59,4 +59,8 @@ public class SmartDashboardUpdater {
 
         SmartDashboard.putData("Test Choices", testChooser);
     }
+    
+    public String getTestSelected() {
+        return testChooser.getSelected();
+    }
 }

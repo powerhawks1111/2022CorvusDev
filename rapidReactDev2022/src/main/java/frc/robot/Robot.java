@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
     /**
      * Objects
      */
-    private final Objects objects = new Objects();
+    private Objects objects = new Objects();
 
     /**
      * Robot variables
@@ -43,7 +43,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
     }
 
     @Override
@@ -53,7 +52,31 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        objects.drive.drive(objects);
+        switch (autoSelected) {
+        case "Red Path":
+            autonomous.redPath();
+            break;
+        case "Orange Path":
+            autonomous.orangePath();
+            break;
+        case "Yellow Path":
+            autonomous.yellowPath();
+            break;
+        case "Green Path":
+            autonomous.greenPath();
+            break;
+        case "Blue Path":
+            autonomous.bluePath();
+            break;
+        case "Purple Path":
+            autonomous.purplePath();
+            break;
+        case "Default Path":
+        default:
+            autonomous.defaultPath();
+            break;
+        }
+        
         objects.m_swerve.updateOdometry();
     }
 

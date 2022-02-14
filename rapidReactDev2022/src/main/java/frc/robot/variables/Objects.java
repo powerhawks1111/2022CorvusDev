@@ -19,5 +19,5 @@ public class Objects {
     public DriveSubsystem drive = new DriveSubsystem();
     public Drivetrain m_swerve = new Drivetrain(navx);
     public Relay relay = new Relay(0, Direction.kReverse);
-    public SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
+    public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
 }
