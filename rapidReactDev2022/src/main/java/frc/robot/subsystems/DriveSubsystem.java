@@ -16,31 +16,20 @@ import frc.robot.variables.Objects;
 import org.photonvision.PhotonCamera;
 
 public class DriveSubsystem {
-    private final XboxController m_controller = new XboxController(0);
-    private final Joystick m_JoystickLeft = new Joystick(0);
-    private final Joystick m_JoystickRight = new Joystick(1);
-    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+
+
 
     PhotonCamera camera = new PhotonCamera("mainVisionCamera");
     
-    
-    public void drive(Objects objects) {
-        double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_JoystickLeft.getRawAxis(0), 0.05)) * Drivetrain.kMaxSpeed;
-        double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-m_JoystickLeft.getRawAxis(1), 0.05)) * Drivetrain.kMaxSpeed;
-        double rot = 0;
-        boolean fieldRelative = true;
-        if (m_JoystickLeft.getRawButton(1)) {
-            rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(turnToTarget(), 0.05)) * Drivetrain.kMaxAngularSpeed;
-            xSpeed = translateToPosition(objects, 0, 0, 1)[0];
-            ySpeed = translateToPosition(objects, 0, 0, 1)[1];
-            
-            
-        } else {
-            rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(m_JoystickRight.getRawAxis(0), 0.05)) * Drivetrain.kMaxAngularSpeed;
-        }
-
+    /**
+     * Does basic operation of swerve; does what it is told
+     * @param objects
+     * @param xSpeed x component
+     * @param ySpeed y component 
+     * @param rot rotation value
+     * @param fieldRelative true= field relative
+     */
+    public void driveSwerve(Objects objects, double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         objects.m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
     }
 

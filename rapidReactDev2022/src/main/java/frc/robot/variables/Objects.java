@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import frc.robot.Operator;
 import frc.robot.SmartDashboardUpdater;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
@@ -19,9 +20,10 @@ import frc.robot.variables.Objects;
 
 public class Objects {
     public AHRS navx = new AHRS();
-    public DriveSubsystem drive = new DriveSubsystem();
+    public DriveSubsystem driveSubsystem = new DriveSubsystem();
     public Drivetrain m_swerve = new Drivetrain(navx);
     public Relay relay = new Relay(0, Direction.kReverse);
+    public Operator operator = new Operator();
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
 
     public static CANSparkMax shooterLeader = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
