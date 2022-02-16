@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import com.kauailabs.navx.frc.AHRS;
+import frc.driver;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -87,9 +88,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        objects.drive.drive(objects);
-        objects.m_swerve.updateOdometry();
-        objects.relay.set(Relay.Value.kOn);
+        driver.drive(objects);
     }
 
 
