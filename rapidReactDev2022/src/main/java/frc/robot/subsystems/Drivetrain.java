@@ -4,46 +4,38 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-
-import com.kauailabs.navx.frc.AHRS; 
+import frc.robot.variables.Objects;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
     public static final double kMaxSpeed = 3.68; // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
+    //positions of each swerve unit on the robot
     private final Translation2d m_frontLeftLocation = new Translation2d(-0.538,  0.538);
     private final Translation2d m_frontRightLocation = new Translation2d(0.538,  0.538);
     private final Translation2d m_backLeftLocation = new Translation2d( -0.538, -0.538);
     private final Translation2d m_backRightLocation = new Translation2d( 0.538, -0.538);
 
-    // private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0.8174);
-    // private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.1154);
-    // private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.1755);
-    // private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.8171);
-
+    //constructor for each swerve module
     private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0.80625);
     private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.40802);
     private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.06178);
     private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.62248);
-    
-    private final AHRS m_navx;
 
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
     private final SwerveDriveOdometry m_odometry;
 
     //Constructor
-    public Drivetrain(AHRS navx) {
-        m_navx = navx;
-        m_odometry = new SwerveDriveOdometry(m_kinematics, m_navx.getRotation2d());
+    public Drivetrain() {
+        m_odometry = new SwerveDriveOdometry(m_kinematics, Objects.navx.getRotation2d());
     }
 
     /**
@@ -56,7 +48,7 @@ public class Drivetrain {
      */
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        Rotation2d robotRotation = m_navx.getRotation2d();
+        Rotation2d robotRotation = Objects.navx.getRotation2d();
         var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -65,13 +57,15 @@ public class Drivetrain {
         m_backRight.setDesiredState(swerveModuleStates[3]);
     }
 
-    /** Updates the field relative position of the robot. */
+    /**
+     * Updates the position of the robot relative to where it started
+     */
     public void updateOdometry() {
-        m_odometry.update(m_navx.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+        m_odometry.update(Objects.navx.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
     }
 
     /**
-     * Gives the current position and rotation of the robot (meters) based on the wheel odometry
+     * Gives the current position and rotation of the robot (meters) based on the wheel odometry from where the robot started
      * @return Pose2d of current robot position
      */
     public Pose2d getCurrentPose2d() {

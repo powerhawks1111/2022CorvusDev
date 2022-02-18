@@ -4,21 +4,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 
 /**
@@ -42,14 +37,7 @@ public class SwerveModule {
         private double turnEncoderOffset;
 
         // Gains are for example purposes only - must be determined for your own robot!
-        private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
-
-        // Gains are for example purposes only - must be determined for your own robot!
         private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController( 1, 0, 0, new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration) );
-
-        // Gains are for example purposes only - must be determined for your own robot!
-        private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
-        private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
         /**
          * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
@@ -99,7 +87,7 @@ public class SwerveModule {
             SwerveModuleState state = SwerveModuleState.optimize( desiredState, new Rotation2d(getTurnEncoderRadians()) );
 
             // Calculate the drive output from the drive PID controller.
-            final double driveOutput = m_drivePIDController.calculate( m_driveEncoder.getVelocity(), state.speedMetersPerSecond );
+            // final double driveOutput = m_drivePIDController.calculate( m_driveEncoder.getVelocity(), state.speedMetersPerSecond );
 
             
 

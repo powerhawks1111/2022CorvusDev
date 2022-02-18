@@ -1,37 +1,45 @@
 package frc.robot.variables;
+
 import com.kauailabs.navx.frc.AHRS; 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
-import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DigitalInput;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-
-import frc.robot.Operator;
 import frc.robot.SmartDashboardUpdater;
+
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
+
 import frc.robot.variables.Objects;
 
 public class Objects {
-    public AHRS navx = new AHRS();
-    public DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public Drivetrain m_swerve = new Drivetrain(navx);
-    public Relay relay = new Relay(0, Direction.kReverse);
-    public Operator operator = new Operator();
+    /**
+     * ---------------------------------------------------------------------------------------
+     * Misc Objects
+     * ---------------------------------------------------------------------------------------
+     */
+    public static AHRS navx = new AHRS();
+    public static Relay relay = new Relay(0, Direction.kReverse);
+    public static DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
+    public static DigitalInput indexIntakeSensor = new DigitalInput(0);
+    public static DigitalInput indexMidSensor = new DigitalInput(2);
+    public static DigitalInput indexShooterSensor = new DigitalInput(1);
+
+    /**
+     * ---------------------------------------------------------------------------------------
+     * Subsystems
+     * ---------------------------------------------------------------------------------------
+     */
+    public static Drivetrain drivetrain = new Drivetrain();
+    public static DriveSubsystem driveSubsystem = new DriveSubsystem();
+    public static IndexSubsystem indexSubsystem = new IndexSubsystem();
+    public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    public static ShootSubsystem shootSubsystem = new ShootSubsystem();
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
 
-    public static CANSparkMax shooterLeader = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // public static CANSparkMax shooterFollower = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    public static CANSparkMax indexLeader = new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    public static CANSparkMax intakeLeader = new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    public static CANSparkMax climbLeader = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
 }

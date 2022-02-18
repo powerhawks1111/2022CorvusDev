@@ -24,15 +24,24 @@ public class SmartDashboardUpdater {
     public static final String kTest4       = "Test Intake";
     public static final String kTest5       = "Test Climb";
 
+    /**
+     * Constructor
+     */
     public SmartDashboardUpdater () {
 
     }
 
+    /**
+     * Populates the smartdashboard
+     */
     public void setupSmartDashboard() {
         setAutonomousOptions();
         setTestOptions();
     }
 
+    /**
+     * Sets up the dropdown menu for auto paths
+     */
     private void setAutonomousOptions() {
         autoChooser.setDefaultOption("Default Path", kDefaultAuto);
         autoChooser.addOption       ("Red Path", kAuto1);
@@ -45,10 +54,17 @@ public class SmartDashboardUpdater {
         SmartDashboard.putData("Autonomuos Choices", autoChooser);
     }
 
+    /**
+     * Returns the option selected on the smartdashboard
+     * @return String of the auto path selected
+     */
     public String getAutoSelected() {
         return autoChooser.getSelected();
     }
 
+    /**
+     * Sets up the dropdown menu for which subsystem to test
+     */
     private void setTestOptions() {
         testChooser.setDefaultOption("Test Default", kDefaultTest);
         testChooser.addOption       ("Test Index", kTest1);
@@ -59,7 +75,11 @@ public class SmartDashboardUpdater {
 
         SmartDashboard.putData("Test Choices", testChooser);
     }
-    
+
+    /**
+     * Returns the option selected on the smartdashboard
+     * @return String of the test function selected
+     */
     public String getTestSelected() {
         return testChooser.getSelected();
     }

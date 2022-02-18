@@ -1,15 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.variables.Objects;
 
@@ -22,22 +13,21 @@ public class DriveSubsystem {
     PhotonCamera camera = new PhotonCamera("mainVisionCamera");
     
     /**
-     * Does basic operation of swerve; does what it is told
+     * Sends drive speeds to the drivetrain
      * @param objects
-     * @param xSpeed x component
-     * @param ySpeed y component 
-     * @param rot rotation value
-     * @param fieldRelative true= field relative
+     * @param xSpeed -1 to +1 speed in X direction
+     * @param ySpeed -1 to +1 speed in Y direction
+     * @param rot -1 to +1 speed to rotate
+     * @param fieldRelative true = field relative
      */
-    public void driveSwerve(Objects objects, double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        objects.m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
+    public void driveSwerve(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+        Objects.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative);
     }
 
     public double turnToTarget() {
         var result = camera.getLatestResult();
         double xPosition = 0;
         SmartDashboard.putNumber("XPos", xPosition);
-        boolean hasTargets = result.hasTargets();
         if (result.hasTargets()) {
             xPosition = result.getBestTarget().getYaw();
             SmartDashboard.putNumber("XPos", xPosition);
@@ -48,9 +38,19 @@ public class DriveSubsystem {
         return xPosition / 50;
 
     }
-    public double[] translateToPosition(Objects objects, double desiredPositionX, double desiredPositionY, double speedScale) {
-        double xDisplace =  objects.m_swerve.getCurrentPose2d().getX();
-        double yDisplace = objects.m_swerve.getCurrentPose2d().getY();
+
+    /**
+     * Autonomously moves the robot in a line towards the desired position
+     * <br><br>
+     * Odometry based off of where the robot started
+     * @param desiredPositionX Desired position X coordinate (meters)
+     * @param desiredPositionY Desired position Y coordinate (meters)
+     * @param speedScale 0 to +1 how fast to travel
+     * @return double[] of the (x,y) speeds to give to the drivetrain
+     */
+    public double[] translateToPosition(double desiredPositionX, double desiredPositionY, double speedScale) {
+        double xDisplace =  Objects.drivetrain.getCurrentPose2d().getX();
+        double yDisplace = Objects.drivetrain.getCurrentPose2d().getY();
         SmartDashboard.putNumber("Xposition", xDisplace);
         SmartDashboard.putNumber("YPosition", yDisplace);
         double xMovement = desiredPositionX - xDisplace;
@@ -77,12 +77,6 @@ public class DriveSubsystem {
         } else {
             componentSpeeds[1] = Math.pow(speedScale * yMovement/10, 3);
         }
-        
- 
-
-
-        
-        
         return componentSpeeds;
     }
 }

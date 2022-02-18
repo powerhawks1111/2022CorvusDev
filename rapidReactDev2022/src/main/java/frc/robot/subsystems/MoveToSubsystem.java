@@ -16,9 +16,9 @@ public class MoveToSubsystem extends SubsystemBase{
         //called once per scheduler run
     }
 
-    public void translateToPosition(Objects objects, double desiredPositionX, double desiredPositionY, double speedScale) {
-        double xDisplace =  objects.m_swerve.getCurrentPose2d().getX();
-        double yDisplace = objects.m_swerve.getCurrentPose2d().getY();
+    public void translateToPosition(double desiredPositionX, double desiredPositionY, double speedScale) {
+        double xDisplace =  Objects.drivetrain.getCurrentPose2d().getX();
+        double yDisplace = Objects.drivetrain.getCurrentPose2d().getY();
         double xMovement = desiredPositionX - xDisplace;
         double yMovement = desiredPositionY - yDisplace;
         if (Math.abs(xMovement)<5 && Math.abs(yMovement)<5) {

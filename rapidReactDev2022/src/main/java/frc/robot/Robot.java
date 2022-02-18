@@ -4,33 +4,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Direction;
-import com.kauailabs.navx.frc.AHRS;
-import frc.robot.Driver;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.variables.Objects;
 
 public class Robot extends TimedRobot {
     /**
      * Main robot functions
      */
-    Driver driver = new Driver();
-    Operator operator = new Operator();
+    DriveAndOperate driveAndOperate = new DriveAndOperate();
     Autonomous autonomous = new Autonomous();
     Test test = new Test();
-
-    /**
-     * Objects
-     */
-    private Objects objects = new Objects();
 
     /**
      * Robot variables
@@ -48,7 +32,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        autoSelected = objects.smartDashboardUpdater.getAutoSelected();
+        autoSelected = Objects.smartDashboardUpdater.getAutoSelected();
     }
 
     @Override
@@ -78,7 +62,8 @@ public class Robot extends TimedRobot {
             break;
         }
         
-        objects.m_swerve.updateOdometry();
+        Objects.drivetrain.updateOdometry();
+        Objects.indexSubsystem.backgroundIndex();
     }
 
     @Override
@@ -88,7 +73,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        driver.drive(objects);
+        driveAndOperate.drive();
+        Objects.indexSubsystem.backgroundIndex();
     }
 
 
