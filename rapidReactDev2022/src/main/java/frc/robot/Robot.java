@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        driveAndOperate.drive();
+        driveAndOperate.driveAndOperate();
         Objects.indexSubsystem.backgroundIndex();
     }
 

@@ -8,11 +8,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import frc.robot.SmartDashboardUpdater;
-
+import frc.robot.commands.Scheduler;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.MoveToSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
 import frc.robot.variables.Objects;
@@ -40,6 +41,9 @@ public class Objects {
     public static IndexSubsystem indexSubsystem = new IndexSubsystem();
     public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public static ShootSubsystem shootSubsystem = new ShootSubsystem();
+    public static MoveToSubsystem moveToSubsystem = new MoveToSubsystem();
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
+
+    public static Scheduler scheduler = new Scheduler();
 
 }
