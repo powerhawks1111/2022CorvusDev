@@ -18,25 +18,60 @@ public class DriveAndOperate {
     private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
 
-    
+    private double driverXStick = 0;
+    private double driverYStick = 0;
+    private double driverRotateStick = 0;
+    private boolean intakeButton = false;
+    private boolean shootWithVisionButton = false;
+    private boolean shootNormalButton = false;
+
     /**
      * Calculates drive values and sends the values to swerve drive
      * @param objects
      */
-    public void drive () {
-        double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_DriverLeft.getRawAxis(0), 0.05)) * Drivetrain.kMaxSpeed;
-        double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-m_DriverLeft.getRawAxis(1), 0.05)) * Drivetrain.kMaxSpeed;
-        double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(m_DriverRight.getRawAxis(0), 0.05)) * Drivetrain.kMaxAngularSpeed;
+    public void driveAndOperate () {
+        double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
+        double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
+        double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
 
-        if (m_OperatorController.getRawButton(1)) { //shoot!
-
+        if (intakeButton) {
+            Objects.intakeSubsystem.extendIntake();
+            Objects.intakeSubsystem.runIntakeWheels(0.5);
+        }
+        else {
+            Objects.intakeSubsystem.retractIntake();
+            Objects.intakeSubsystem.runIntakeWheels(0);
         }
         
-        
+        if (shootNormalButton) {
+            Objects.shootSubsystem.setShooterRPM(4000);
+        }
+        else {
+            Objects.shootSubsystem.setShooterRPM(0);
+        }
         
         
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
+    }
+
+    /**
+     * Reads the driver controller buttons and stores their current state
+     */
+    public void readDriverController() {
+        driverXStick = m_DriverLeft.getRawAxis(0);
+        driverYStick = m_DriverLeft.getRawAxis(1);
+        driverRotateStick = m_DriverRight.getRawAxis(0);
+
+        intakeButton = m_DriverRight.getRawButton(0);
+    }
+    
+    /**
+     * Reads the operator controller buttons and stores their current state
+     */
+    public void readOperatorController() {
+        shootWithVisionButton = m_OperatorController.getRawButton(0);
+        shootNormalButton = m_OperatorController.getRawButton(1);
     }
 }
