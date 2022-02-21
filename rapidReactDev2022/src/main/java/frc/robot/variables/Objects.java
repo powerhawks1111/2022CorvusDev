@@ -11,6 +11,7 @@ import frc.robot.SmartDashboardUpdater;
 
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
@@ -29,6 +30,7 @@ public class Objects {
     public static DigitalInput indexIntakeSensor = new DigitalInput(0);
     public static DigitalInput indexMidSensor = new DigitalInput(2);
     public static DigitalInput indexShooterSensor = new DigitalInput(1);
+    public static DigitalInput limitSwitch = new DigitalInput(3);
 
     /**
      * ---------------------------------------------------------------------------------------
@@ -41,5 +43,6 @@ public class Objects {
     public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public static ShootSubsystem shootSubsystem = new ShootSubsystem();
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
+    public static HoodSubsystem hoodSubsystem = new HoodSubsystem();
 
 }

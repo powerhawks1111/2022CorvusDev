@@ -4,7 +4,9 @@ import frc.robot.variables.Objects;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.Drivetrain;
+
 
 public class DriveAndOperate {
 
@@ -27,13 +29,14 @@ public class DriveAndOperate {
 
     /**
      * Calculates drive values and sends the values to swerve drive
-     * @param objects
      */
     public void drive () {
         double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
         double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
+
+        Objects.hoodSubsystem.adjustHood();
 
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
