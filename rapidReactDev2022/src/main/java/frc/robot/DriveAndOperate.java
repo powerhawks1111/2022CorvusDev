@@ -30,7 +30,7 @@ public class DriveAndOperate {
     /**
      * Calculates drive values and sends the values to swerve drive
      */
-    public void drive () {
+    public void driveAndOperate () {
         double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
         double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
@@ -69,7 +69,7 @@ public class DriveAndOperate {
 
         intakeButton = m_DriverRight.getRawButton(0);
     }
-
+    
     /**
      * Reads the operator controller buttons and stores their current state
      */
