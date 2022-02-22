@@ -36,4 +36,19 @@ public class IndexSubsystem {
             Motors.indexLeader.stopMotor();
         }
     }
+
+    public void testMotors () {
+        Motors.intakeLeader.set(.55);
+        Motors.indexLeader.set(-.25);
+        Motors.shooterLeader.set(.2);
+        //Motors.hoodMotor.set(.1);
+
+    }
+
+    public void stopMotors () {
+        Motors.intakeLeader.stopMotor();;
+        Motors.indexLeader.stopMotor();
+        Motors.shooterLeader.stopMotor();
+        //Motors.hoodMotor.stopMotor();
+    }
 }

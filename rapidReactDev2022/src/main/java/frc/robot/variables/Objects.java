@@ -17,6 +17,8 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MoveToSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
+import edu.wpi.first.wpilibj.Compressor;
+
 
 import frc.robot.variables.Objects;
 
@@ -26,8 +28,11 @@ public class Objects {
      * Misc Objects
      * ---------------------------------------------------------------------------------------
      */
-    public static AHRS navx = new AHRS();
-    public static DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
+ 
+     public static AHRS navx = new AHRS();
+    public static DoubleSolenoid intakePistonLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    public static DoubleSolenoid intakePistonRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+    public static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public static DigitalInput limitSwitch = new DigitalInput(3);
     public static DigitalInput indexMidSensor = new DigitalInput(1);
     public static DigitalInput indexShooterSensor = new DigitalInput(2);

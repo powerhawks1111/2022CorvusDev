@@ -6,13 +6,25 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 public class VisionSubsystem {
     double area;
-    Boolean validTargets;
-
-    public void getVision () {
+    double yAngle;
+    double xAngle;
+    boolean validTargets;
+    LinearFilter filter = LinearFilter.movingAverage(2);
+    
+    public void updateVision () {
         area = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+        yAngle = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+        xAngle = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean(false);
-        LinearFilter filter = LinearFilter.movingAverage(2);
+
+        yAngle = filter.calculate(yAngle);
+        xAngle = filter.calculate(xAngle);
         area = filter.calculate(area);
-        SmartDashboard.putNumber("Area", area);
+
+        if (validTargets) {
+            SmartDashboard.putString("Targets", "TARGET FOUND");
+        } else {
+            SmartDashboard.putString("Targets", "NO VISION TARGETS");
+        }
     }
 }

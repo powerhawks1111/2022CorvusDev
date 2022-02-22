@@ -12,8 +12,8 @@ public class DriveAndOperate {
 
     // private final XboxController m_controller = new XboxController(0);
     private final Joystick m_DriverLeft = new Joystick(0);
-    private final Joystick m_DriverRight = new Joystick(1);
-    private final Joystick m_OperatorController = new Joystick(2);
+    public final Joystick m_DriverRight = new Joystick(1);
+    public final Joystick m_OperatorController = new Joystick(2);
 
     private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);

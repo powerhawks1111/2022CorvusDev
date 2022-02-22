@@ -73,8 +73,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        driveAndOperate.driveAndOperate();
-        Objects.indexSubsystem.backgroundIndex();
+        //driveAndOperate.driveAndOperate();
+        if (driveAndOperate.m_DriverRight.getRawButton(1)) {
+            Objects.indexSubsystem.testMotors();
+        } else {
+            Objects.indexSubsystem.stopMotors();
+        }
+
+        if (driveAndOperate.m_DriverRight.getRawButton(5)) {
+            Objects.intakeSubsystem.extendIntake();
+        } else {
+            Objects.intakeSubsystem.retractIntake();
+        }
+        Objects.compressor.enableAnalog(100, 120);
+        
     }
 
 

@@ -15,14 +15,16 @@ public class IntakeSubsystem {
      * Activates relay to extend intake piston
      */
     public void extendIntake() {
-        Objects.intakePiston.set(DoubleSolenoid.Value.kForward);
+        Objects.intakePistonRight.set(DoubleSolenoid.Value.kForward);
+        Objects.intakePistonLeft.set(DoubleSolenoid.Value.kForward);
     }
 
     /**
      * Activates relay to retract intake piston
      */
     public void retractIntake() {
-        Objects.intakePiston.set(DoubleSolenoid.Value.kReverse);
+        Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
+        Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);
     }
 
     /**
