@@ -4,6 +4,7 @@ import frc.robot.variables.Objects;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.Drivetrain;
 
@@ -38,23 +39,23 @@ public class DriveAndOperate {
 
         Objects.hoodSubsystem.adjustHood();
 
-        if (intakeButton) {
-            Objects.intakeSubsystem.extendIntake();
-            Objects.intakeSubsystem.runIntakeWheels(0.5);
-        }
-        else {
-            Objects.intakeSubsystem.retractIntake();
-            Objects.intakeSubsystem.runIntakeWheels(0);
-        }
+        // if (intakeButton) {
+        //     Objects.intakeSubsystem.extendIntake();
+        //     Objects.intakeSubsystem.runIntakeWheels(0.5);
+        // }
+        // else {
+        //     Objects.intakeSubsystem.retractIntake();
+        //     Objects.intakeSubsystem.runIntakeWheels(0);
+        // }
         
-        if (shootNormalButton) {
-            Objects.shootSubsystem.setShooterRPM(4000);
-        }
-        else {
-            Objects.shootSubsystem.setShooterRPM(0);
-        }
+        // if (shootNormalButton) {
+        //     Objects.shootSubsystem.setShooterRPM(4000);
+        // }
+        // else {
+        //     Objects.shootSubsystem.setShooterRPM(0);
+        // }
         
-        
+        SmartDashboard.putNumber("xSpeed", xSpeed);
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
     }

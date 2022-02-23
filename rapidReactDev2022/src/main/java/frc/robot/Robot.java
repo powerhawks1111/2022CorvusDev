@@ -5,7 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.Relay.Value;
+import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
 
 public class Robot extends TimedRobot {
@@ -73,19 +74,24 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        //driveAndOperate.driveAndOperate();
+        driveAndOperate.readDriverController();
+        driveAndOperate.readOperatorController();
+        driveAndOperate.driveAndOperate();
         if (driveAndOperate.m_DriverRight.getRawButton(1)) {
             Objects.indexSubsystem.testMotors();
+            Motors.climbLeader.set(.1);
         } else {
             Objects.indexSubsystem.stopMotors();
+            Motors.climbLeader.stopMotor();
         }
-
+        //Objects.visionRelay.set(Value.kForward);
         if (driveAndOperate.m_DriverRight.getRawButton(5)) {
             Objects.intakeSubsystem.extendIntake();
+            
         } else {
             Objects.intakeSubsystem.retractIntake();
         }
-        Objects.compressor.enableAnalog(100, 120);
+        //Objects.compressor.enableDigital();;
         
     }
 

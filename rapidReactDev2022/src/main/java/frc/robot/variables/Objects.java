@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.*;
 
 import frc.robot.SmartDashboardUpdater;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -37,6 +38,7 @@ public class Objects {
     public static DigitalInput indexMidSensor = new DigitalInput(1);
     public static DigitalInput indexShooterSensor = new DigitalInput(2);
     public static Relay relay = new Relay(0, Direction.kReverse);
+    //public static Relay visionRelay = new Relay(23, Direction.kReverse);
 
     /**
      * ---------------------------------------------------------------------------------------

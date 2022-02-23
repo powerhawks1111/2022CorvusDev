@@ -39,9 +39,9 @@ public class IndexSubsystem {
 
     public void testMotors () {
         Motors.intakeLeader.set(.55);
-        Motors.indexLeader.set(-.25);
+        Motors.indexLeader.set(-.25); //BACKWARD
         Motors.shooterLeader.set(.2);
-        //Motors.hoodMotor.set(.1);
+        Motors.hoodMotor.set(.1); //UP
 
     }
 
@@ -49,6 +49,6 @@ public class IndexSubsystem {
         Motors.intakeLeader.stopMotor();;
         Motors.indexLeader.stopMotor();
         Motors.shooterLeader.stopMotor();
-        //Motors.hoodMotor.stopMotor();
+        Motors.hoodMotor.stopMotor();
     }
 }

@@ -24,9 +24,9 @@ public class Drivetrain {
     private final Translation2d m_backRightLocation = new Translation2d( 0.538, -0.538);
 
     //constructor for each swerve module
-    private final SwerveModule m_frontRight = new SwerveModule(1, 2, 10, 0.80625);
-    private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.40802);
-    private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.06178);
+    private final SwerveModule m_frontRight = new SwerveModule(21, 2, 10, 0.80625);
+    private final SwerveModule m_frontLeft  = new SwerveModule(3, 4, 11, 0.41802);
+    private final SwerveModule m_backLeft   = new SwerveModule(5, 6, 12, 0.05178);
     private final SwerveModule m_backRight  = new SwerveModule(7, 8, 13, 0.62248);
 
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
