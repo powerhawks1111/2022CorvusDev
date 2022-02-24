@@ -9,6 +9,9 @@ import frc.robot.variables.Objects;
 
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.RelativeEncoder;
 public class HoodSubsystem {
     //private SparkMaxPIDController hoodPID = Motors.hoodMotor.getPIDController();
@@ -16,8 +19,11 @@ public class HoodSubsystem {
     private double kI = 0;
     private double kD = 0;
 
-    double defaultPosition;
-    double currentPosition;
+    private boolean isZeroed = false;
+
+    private double defaultPosition;
+    private double currentPosition;
+    private double homePosition;
 
     public HoodSubsystem() {
         //hoodPID.setP(kP);
@@ -25,13 +31,17 @@ public class HoodSubsystem {
         //hoodPID.setD(kD);
     }
     public void setHoodZero () {
+        isZeroed = false;
         if (Objects.limitSwitch.get()) { //replace with limit switch
             //turn motors off
-            //defaultPosition = Motors.hoodMotor.getEncoder().getPosition();
-            currentPosition = 0;
+            Motors.climbLeader.stopMotor();
+            homePosition = Motors.hoodMotor.getEncoder().getPosition();
+            isZeroed = true;
+            SmartDashboard.putNumber("homeEncoderValue", homePosition);
+
             //reset encoder
         } else { //move motor down until we hit
-            //Motors.hoodMotor.set(-.1);
+            Motors.hoodMotor.set(-.1);
         }
 
     }
@@ -40,9 +50,12 @@ public class HoodSubsystem {
      */
     public void adjustHood () { //runs in the background
         //gather vision output for distance to RPM/hood angle
+        if (isZeroed) {
+            double wantedPosition = .1;
+            double motorPosition = ((wantedPosition * 540) /11) - defaultPosition;
+        }
         //currentPosition = (((defaultPosition - Motors.hoodMotor.getEncoder().getPosition()) * 11)/540); //use this somehow lmao
-        double wantedPosition = .1;
-        double motorPosition = ((wantedPosition * 540) /11) - defaultPosition;
+
         //hoodPID.setReference(motorPosition, ControlType.kPosition);
         //set hood based on encoder
     }
