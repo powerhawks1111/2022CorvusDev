@@ -53,7 +53,7 @@ public class HoodSubsystem {
     public void adjustHood (double wantedPosition) { //runs in the background
         //gather vision output for distance to RPM/hood angle
         if (isZeroed) {
-            double motorPosition = ((wantedPosition * 540) /11) - defaultPosition;
+            double motorPosition = ((wantedPosition * 540) /11) + defaultPosition;
             hoodPID.setReference(motorPosition, ControlType.kPosition);
         }
         //currentPosition = (((defaultPosition - Motors.hoodMotor.getEncoder().getPosition()) * 11)/540); //use this somehow lmao
