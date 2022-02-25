@@ -47,6 +47,8 @@ public class MoveToSubsystem extends SubsystemBase{
         } else {
             componentSpeeds[1] = Math.pow(speedScale * yMovement/10, 3);
         }
+
+        Objects.drivetrain.drive(componentSpeeds[0], componentSpeeds[1], 0, true);
     }
 
     public boolean moveFinished () {

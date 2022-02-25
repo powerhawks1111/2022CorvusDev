@@ -20,6 +20,7 @@ public class Autonomous {
             commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 1, 1, 0, 0.25, 0.25));
             start = true;
         }
+        startAutonomous();
     }
 
     public void orangePath() {
