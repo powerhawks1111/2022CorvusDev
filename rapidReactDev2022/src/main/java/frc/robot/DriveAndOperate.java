@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -27,6 +28,8 @@ public class DriveAndOperate {
     private boolean intakeButton = false;
     private boolean shootWithVisionButton = false;
     private boolean shootNormalButton = false;
+    private boolean climbForwardButton = false;
+    private boolean climbBackwardButton = false;
 
     /**
      * Calculates drive values and sends the values to swerve drive
@@ -37,24 +40,42 @@ public class DriveAndOperate {
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
 
-        Objects.hoodSubsystem.adjustHood();
 
-        // if (intakeButton) {
-        //     Objects.intakeSubsystem.extendIntake();
-        //     Objects.intakeSubsystem.runIntakeWheels(0.5);
-        // }
-        // else {
-        //     Objects.intakeSubsystem.retractIntake();
-        //     Objects.intakeSubsystem.runIntakeWheels(0);
-        // }
+        if (intakeButton) {
+            Objects.intakeSubsystem.extendIntake();
+            Objects.intakeSubsystem.runIntakeWheels(0.5);
+        }
+        else {
+            Objects.intakeSubsystem.retractIntake();
+            Objects.intakeSubsystem.runIntakeWheels(0);
+        }
         
-        // if (shootNormalButton) {
-        //     Objects.shootSubsystem.setShooterRPM(4000);
-        // }
-        // else {
-        //     Objects.shootSubsystem.setShooterRPM(0);
-        // }
+        if (shootNormalButton) {
+            Objects.shootSubsystem.setShooterRPM(1800);
+        }
+        else {
+            Motors.shooterLeader.stopMotor();
+        }
+
+        if (climbForwardButton) {
+            Objects.climbSubsystem.driveClimbMotor(.1);
+        } else if (climbBackwardButton) {
+            Objects.climbSubsystem.driveClimbMotor(-.1);
+        } else {
+            Motors.climbLeader.stopMotor();
+        }
+
+        if (m_DriverLeft.getRawButton(1)) {
+            Objects.hoodSubsystem.setHoodZero();
+            
+        }
         
+        if (m_DriverLeft.getRawButton(5)) {
+            Objects.hoodSubsystem.adjustHood(-(m_DriverLeft.getRawAxis(3)+1)/2);
+
+        } else {
+            //Motors.hoodMotor.stopMotor();
+        }
         SmartDashboard.putNumber("xSpeed", xSpeed);
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
@@ -68,14 +89,16 @@ public class DriveAndOperate {
         driverYStick = m_DriverLeft.getRawAxis(1);
         driverRotateStick = m_DriverRight.getRawAxis(0);
 
-        intakeButton = m_DriverRight.getRawButton(0);
+        intakeButton = m_DriverRight.getRawButton(1);
     }
     
     /**
      * Reads the operator controller buttons and stores their current state
      */
     public void readOperatorController() {
-        shootWithVisionButton = m_OperatorController.getRawButton(0);
-        shootNormalButton = m_OperatorController.getRawButton(1);
+        shootWithVisionButton = m_OperatorController.getRawButton(1);
+        shootNormalButton = m_OperatorController.getRawButton(2);
+        climbForwardButton = m_OperatorController.getRawButton(3);
+        climbBackwardButton = m_OperatorController.getRawButton(4);
     }
 }
