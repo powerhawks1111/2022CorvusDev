@@ -12,7 +12,7 @@ import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.05; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.1; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
@@ -45,7 +45,7 @@ public class IndexSubsystem {
         //currentPosition = Motors.hoodMotor.getEncoder().getPosition();
         currentPosition = -10;
         if(Objects.shootSubsystem.shouldFeedToShooter()) {
-            driveIndexWheel(indexWheelSpeed);
+            driveIndexWheel(-.12);//fast to shoot
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
             awaitingBall = true;

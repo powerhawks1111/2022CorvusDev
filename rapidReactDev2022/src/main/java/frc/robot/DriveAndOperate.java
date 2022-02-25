@@ -40,7 +40,6 @@ public class DriveAndOperate {
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
 
-        Objects.hoodSubsystem.adjustHood();
 
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
@@ -52,7 +51,7 @@ public class DriveAndOperate {
         }
         
         if (shootNormalButton) {
-            Objects.shootSubsystem.setShooterRPM(800);
+            Objects.shootSubsystem.setShooterRPM(1800);
         }
         else {
             Motors.shooterLeader.stopMotor();
@@ -65,7 +64,18 @@ public class DriveAndOperate {
         } else {
             Motors.climbLeader.stopMotor();
         }
+
+        if (m_DriverLeft.getRawButton(1)) {
+            Objects.hoodSubsystem.setHoodZero();
+            
+        }
         
+        if (m_DriverLeft.getRawButton(5)) {
+            Objects.hoodSubsystem.adjustHood(-(m_DriverLeft.getRawAxis(3)+1)/2);
+
+        } else {
+            //Motors.hoodMotor.stopMotor();
+        }
         SmartDashboard.putNumber("xSpeed", xSpeed);
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?

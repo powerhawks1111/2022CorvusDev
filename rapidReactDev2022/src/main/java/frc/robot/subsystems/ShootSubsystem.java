@@ -14,9 +14,9 @@ public class ShootSubsystem {
     private SparkMaxPIDController shooterPID = Motors.shooterLeader.getPIDController();
     private RelativeEncoder shooterEncoder = Motors.shooterLeader.getEncoder();
 
-    private double kP = 0.003;
-    private double kI = 0.000001;
-    private double kD = 0;
+    private double kP = 0.004;
+    private double kI = 0;
+    private double kD = 0.05;
 
     private double currentSetpoint;
     private double rpmTolerance;
