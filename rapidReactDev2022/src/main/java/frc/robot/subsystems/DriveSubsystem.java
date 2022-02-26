@@ -4,13 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.variables.Objects;
 
-import org.photonvision.PhotonCamera;
-
 public class DriveSubsystem {
-
-
-
-    PhotonCamera camera = new PhotonCamera("mainVisionCamera");
     
     /**
      * Sends drive speeds to the drivetrain
@@ -25,17 +19,14 @@ public class DriveSubsystem {
     }
 
     public double turnToTarget() {
-        var result = camera.getLatestResult();
         double xPosition = 0;
-        SmartDashboard.putNumber("XPos", xPosition);
         if (result.hasTargets()) {
             xPosition = result.getBestTarget().getYaw();
-            SmartDashboard.putNumber("XPos", xPosition);
         } else {
             xPosition = 0;
         }
         
-        return xPosition / 50;
+        return xPosition / ;
 
     }
 
