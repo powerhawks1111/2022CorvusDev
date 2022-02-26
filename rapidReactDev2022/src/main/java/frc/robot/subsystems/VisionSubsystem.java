@@ -21,10 +21,15 @@ public class VisionSubsystem {
         xAngle = filter.calculate(xAngle);
         area = filter.calculate(area);
 
+        SmartDashboard.putNumber("yAngle", yAngle);
         if (validTargets) {
-            SmartDashboard.putString("Targets", "TARGET FOUND");
+            SmartDashboard.putBoolean("Targets", true);
         } else {
-            SmartDashboard.putString("Targets", "NO VISION TARGETS");
+            SmartDashboard.putBoolean("Targets", false);
         }
+    }
+
+    public void calculateAngle () {
+
     }
 }

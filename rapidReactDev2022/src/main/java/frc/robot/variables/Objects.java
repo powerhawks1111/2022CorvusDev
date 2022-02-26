@@ -18,6 +18,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MoveToSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Compressor;
 
 
@@ -53,6 +54,7 @@ public class Objects {
     public static MoveToSubsystem moveToSubsystem = new MoveToSubsystem();
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
     public static HoodSubsystem hoodSubsystem = new HoodSubsystem();
+    public static VisionSubsystem visionSubsystem = new VisionSubsystem();
 
     public static Scheduler scheduler = new Scheduler();
 

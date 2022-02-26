@@ -14,4 +14,7 @@ public class Motors {
     public static CANSparkMax intakeLeader = new CANSparkMax(13, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     public static CANSparkMax climbLeader = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+
+    
 }

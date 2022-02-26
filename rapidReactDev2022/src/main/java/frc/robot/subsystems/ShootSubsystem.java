@@ -14,7 +14,7 @@ public class ShootSubsystem {
     private SparkMaxPIDController shooterPID = Motors.shooterLeader.getPIDController();
     private RelativeEncoder shooterEncoder = Motors.shooterLeader.getEncoder();
 
-    private double kP = 0.004;
+    private double kP = 0.005;
     private double kI = 0;
     private double kD = 0.05;
 
@@ -38,6 +38,7 @@ public class ShootSubsystem {
     public void setShooterRPM(double shooterRPM) {
         currentSetpoint = shooterRPM;
         shooterPID.setReference(shooterRPM, ControlType.kVelocity);
+        SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
     }
 
     /**

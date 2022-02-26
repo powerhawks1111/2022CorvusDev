@@ -12,11 +12,11 @@ import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.1; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.065; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
-    private double kP = 0.0001;
+    private double kP = 0.05;
     private double kI = 0;
     private double kD = 0;
 
@@ -33,7 +33,7 @@ public class IndexSubsystem {
      * @param power <ul><li>-1 to +1 speed to drive index motor</ul></li>
      */
     public void driveIndexWheel(double power) {
-        Motors.indexLeader.set(power);
+        indexPID.setReference(power, ControlType.kDutyCycle);
     }
 
     /**
@@ -42,22 +42,24 @@ public class IndexSubsystem {
      * It checks the optical sensors and polls the shooter to see if it should run the index wheel
      */
     public void backgroundIndex() {
-        //currentPosition = Motors.hoodMotor.getEncoder().getPosition();
-        currentPosition = -10;
+        
+        
         if(Objects.shootSubsystem.shouldFeedToShooter()) {
             driveIndexWheel(-.12);//fast to shoot
+            currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
+            currentPosition = Motors.indexLeader.getEncoder().getPosition();
             awaitingBall = true;
         } else if (Objects.indexShooterSensor.get() && awaitingBall) {
             awaitingBall = false;
-            Motors.indexLeader.stopMotor();
-            //indexPID.setReference(currentPosition, ControlType.kPosition);
+            indexPID.setReference(currentPosition, ControlType.kPosition);
         } else if (awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
+            currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else {
             awaitingBall = false;
-            Motors.indexLeader.stopMotor();
+            indexPID.setReference(Motors.indexLeader.getEncoder().getPosition(), ControlType.kPosition);
             //indexPID.setReference(currentPosition, ControlType.kPosition);
         }
     }

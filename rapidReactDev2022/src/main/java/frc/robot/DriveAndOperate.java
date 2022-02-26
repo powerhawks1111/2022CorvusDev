@@ -30,16 +30,21 @@ public class DriveAndOperate {
     private boolean shootNormalButton = false;
     private boolean climbForwardButton = false;
     private boolean climbBackwardButton = false;
+    private double driverLeftHood = 0;
+    private boolean testHood = false;
+    private boolean testShooter = false;
+    private double driverRightShootThrottle = 0;
+
 
     /**
      * Calculates drive values and sends the values to swerve drive
      */
     public void driveAndOperate () {
-        double xSpeed = m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
-        double ySpeed = m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
+        double xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
+        double ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
-
+        Objects.visionSubsystem.updateVision();
 
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
@@ -50,7 +55,9 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
         
-        if (shootNormalButton) {
+        if (testShooter && !shootNormalButton) {
+            Objects.shootSubsystem.setShooterRPM(driverRightShootThrottle*3000);
+        } else if (shootNormalButton) {
             Objects.shootSubsystem.setShooterRPM(1800);
         }
         else {
@@ -70,11 +77,9 @@ public class DriveAndOperate {
             
         }
         
-        if (m_DriverLeft.getRawButton(5)) {
-            Objects.hoodSubsystem.adjustHood(-(m_DriverLeft.getRawAxis(3)+1)/2);
-
+        if (testHood) {
+            Objects.hoodSubsystem.adjustHood(driverLeftHood);
         } else {
-            //Motors.hoodMotor.stopMotor();
         }
         SmartDashboard.putNumber("xSpeed", xSpeed);
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
@@ -88,8 +93,12 @@ public class DriveAndOperate {
         driverXStick = m_DriverLeft.getRawAxis(0);
         driverYStick = m_DriverLeft.getRawAxis(1);
         driverRotateStick = m_DriverRight.getRawAxis(0);
-
+        driverLeftHood = (m_DriverLeft.getRawAxis(3)+1)/2;
+        driverRightShootThrottle = (m_DriverRight.getRawAxis(3)+1)/2;
         intakeButton = m_DriverRight.getRawButton(1);
+        testHood = m_DriverLeft.getRawButton(5);
+        testShooter = m_DriverRight.getRawButton(5);
+        
     }
     
     /**
