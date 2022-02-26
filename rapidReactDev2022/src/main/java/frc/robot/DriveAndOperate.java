@@ -57,11 +57,13 @@ public class DriveAndOperate {
         
         if (testShooter && !shootNormalButton) {
             Objects.shootSubsystem.setShooterRPM(driverRightShootThrottle*3000);
+            SmartDashboard.putBoolean("isShootingButton", true);
         } else if (shootNormalButton) {
             Objects.shootSubsystem.setShooterRPM(1800);
         }
         else {
             Motors.shooterLeader.stopMotor();
+            SmartDashboard.putBoolean("isShootingButton", false);
         }
 
         if (climbForwardButton) {
@@ -82,7 +84,7 @@ public class DriveAndOperate {
         } else {
         }
         SmartDashboard.putNumber("xSpeed", xSpeed);
-        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot, fieldRelative); //final movement; sends drive values to swerve
+        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot + 0.0001, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
     }
 
