@@ -45,10 +45,10 @@ public class DriveAndOperate {
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
         Objects.visionSubsystem.updateVision();
-
+        
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
-            Objects.intakeSubsystem.runIntakeWheels(0.5);
+            Objects.intakeSubsystem.runIntakeWheels(0.6);
         }
         else {
             Objects.intakeSubsystem.retractIntake();
@@ -67,9 +67,9 @@ public class DriveAndOperate {
         }
 
         if (climbForwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(.1);
+            Objects.climbSubsystem.driveClimbMotor(.3);
         } else if (climbBackwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(-.1);
+            Objects.climbSubsystem.driveClimbMotor(-.3);
         } else {
             Motors.climbLeader.stopMotor();
         }
