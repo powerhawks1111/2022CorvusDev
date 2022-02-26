@@ -5,11 +5,16 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 public class VisionSubsystem {
-    double area;
-    double yAngle;
-    double xAngle;
-    boolean validTargets;
-    LinearFilter filter = LinearFilter.movingAverage(2);
+    private double area;
+    private double yAngle;
+    private double xAngle;
+    private boolean validTargets;
+    private LinearFilter filter = LinearFilter.movingAverage(2);
+
+    double cameraHeight = 37; //inches
+    double targetHeight = 114;
+    double cameraAngle = 35; //degrees
+    double cameraAngleRadians = cameraAngle * (Math.PI / 180);
     
     public void updateVision () {
         area = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
@@ -29,7 +34,33 @@ public class VisionSubsystem {
         }
     }
 
-    public void calculateAngle () {
+    public double calculateDistanceInches () {
+        double cameraToGoalInches = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians);
+        return cameraToGoalInches;
+    }
 
+    public double distanceToRPM (double distanceToGoalInches) {
+        double rpm = (4.373 * distanceToGoalInches) + 1101;
+    }
+
+    public void turnToTargetPower() {
+        double turnKp = 1;
+        double rotatePower = xAngle / (27 * turnKp);
+        return rotatePower;
+    }
+
+    public double getXAngle() {
+        updateVision();
+        return xAngle;
+    }
+
+    public double getYAngle() {
+        updateVision();
+        return yAngle;
+    }
+
+    public boolean getHasValidTargets() {
+        updateVision();
+        return validTargets;
     }
 }
