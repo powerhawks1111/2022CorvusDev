@@ -3,6 +3,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
+import frc.robot.DriveAndOperate;
 
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -19,7 +20,7 @@ public class IndexSubsystem {
     private double kP = 0.05;
     private double kI = 0;
     private double kD = 0;
-
+    private boolean shoot = false;
     double currentPosition;
 
     public IndexSubsystem () {
@@ -36,6 +37,10 @@ public class IndexSubsystem {
         indexPID.setReference(power, ControlType.kDutyCycle);
     }
 
+    public void shoot(Boolean value) {
+        shoot = value;
+    }
+
     /**
      * Runs constantly in the autonomous and teleop periodic functions
      * <br><br>
@@ -44,8 +49,8 @@ public class IndexSubsystem {
     public void backgroundIndex() {
         
         
-        if(Objects.shootSubsystem.shouldFeedToShooter()) {
-            driveIndexWheel(-.12);//fast to shoot
+        if (Objects.shootSubsystem.shouldFeedToShooter()) { //
+            driveIndexWheel(-.15);//fast to shoot
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);

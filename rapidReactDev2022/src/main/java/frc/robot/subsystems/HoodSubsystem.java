@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import javax.swing.text.Position;
+import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -47,13 +48,15 @@ public class HoodSubsystem {
         
 
     }
+
     /**
      * Adjusts hood in the background of the program
      */
     public void adjustHood (double wantedPosition) { //runs in the background
         //gather vision output for distance to RPM/hood angle
-        if (isZeroed) {
-            double motorPosition = wantedPosition * 122 + defaultPosition;
+        if (isZeroed&& wantedPosition<homePosition) {
+            SmartDashboard.putNumber("wantedHood", wantedPosition);
+            double motorPosition = wantedPosition * 122 + homePosition;
             SmartDashboard.putNumber("HoodValue", motorPosition);
             hoodPID.setReference(motorPosition, ControlType.kPosition);
         } else {

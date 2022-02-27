@@ -22,9 +22,7 @@ public class VisionSubsystem {
         xAngle = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean(false);
 
-        yAngle = filter.calculate(yAngle);
-        xAngle = filter.calculate(xAngle);
-        area = filter.calculate(area);
+        
 
         SmartDashboard.putNumber("yAngle", yAngle);
         if (validTargets) {
@@ -33,7 +31,9 @@ public class VisionSubsystem {
             SmartDashboard.putBoolean("Targets", false);
         }
     }
-
+    public double rpmFromVision () {
+        return (-22.185*yAngle) +1456;
+    }
     public double calculateDistanceInches () {
         double cameraToGoalInches = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians);
         return cameraToGoalInches;
@@ -41,9 +41,10 @@ public class VisionSubsystem {
 
     public double distanceToRPM (double distanceToGoalInches) {
         double rpm = (4.373 * distanceToGoalInches) + 1101;
+        return rpm;
     }
 
-    public void turnToTargetPower() {
+    public double turnToTargetPower() {
         double turnKp = 1;
         double rotatePower = xAngle / (27 * turnKp);
         return rotatePower;
@@ -62,5 +63,13 @@ public class VisionSubsystem {
     public boolean getHasValidTargets() {
         updateVision();
         return validTargets;
+    }
+
+    public double hoodAngleFromVision () {
+        double motorPosition = -.00507*yAngle+.006908;
+        if (motorPosition <=0) {
+             motorPosition = 0;
+         }
+        return motorPosition;
     }
 }

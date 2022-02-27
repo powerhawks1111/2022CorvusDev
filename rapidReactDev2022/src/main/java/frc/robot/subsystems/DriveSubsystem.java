@@ -19,15 +19,7 @@ public class DriveSubsystem {
     }
 
     public double turnToTarget() {
-        double xPosition = 0;
-        if (result.hasTargets()) {
-            xPosition = result.getBestTarget().getYaw();
-        } else {
-            xPosition = 0;
-        }
-        
-        return xPosition / ;
-
+        return 0;
     }
 
     /**

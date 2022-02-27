@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
+        Objects.drivetrain.updateOdometry();
         switch (autoSelected) {
         case "Red Path":
             autonomous.redPath();
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
             break;
         }
         
-        Objects.drivetrain.updateOdometry();
+
         Objects.indexSubsystem.backgroundIndex();
     }
 

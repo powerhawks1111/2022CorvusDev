@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.DutyCycle;
  */
 public class SwerveModule {
         private static final double kWheelDiameter = 0.1016; // 0.1016 M wheel diameter (4")
-        private static final double kWheelCircumference = Math.PI *kWheelDiameter;
-        private static final double rpmToVelocityScaler = kWheelCircumference / 8.16; //SDS Mk3 standard gear ratio from motor to wheel
+        private static final double kWheelCircumference = Math.PI * kWheelDiameter;
+        private static final double rpmToVelocityScaler = (kWheelCircumference / 8.16); //SDS Mk3 standard gear ratio from motor to wheel
 
         private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
         private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared

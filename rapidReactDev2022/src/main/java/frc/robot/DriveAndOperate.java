@@ -33,6 +33,7 @@ public class DriveAndOperate {
     private double driverLeftHood = 0;
     private boolean testHood = false;
     private boolean testShooter = false;
+    private boolean lineupButton = false;
     private double driverRightShootThrottle = 0;
 
 
@@ -45,7 +46,7 @@ public class DriveAndOperate {
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
         boolean fieldRelative = true;
         Objects.visionSubsystem.updateVision();
-        
+        //Objects.moveToSubsystem.translateToPosition(10, 10, .2);
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
             Objects.intakeSubsystem.runIntakeWheels(0.6);
@@ -54,9 +55,11 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.retractIntake();
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
-        
+        Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (testShooter && !shootNormalButton) {
-            Objects.shootSubsystem.setShooterRPM(driverRightShootThrottle*3000);
+            Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
+            rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
+            Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
         } else if (shootNormalButton) {
             Objects.shootSubsystem.setShooterRPM(1800);
@@ -78,9 +81,13 @@ public class DriveAndOperate {
             Objects.hoodSubsystem.setHoodZero();
             
         }
+
+        if (lineupButton) {
+            rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
+        }
         
         if (testHood) {
-            Objects.hoodSubsystem.adjustHood(driverLeftHood);
+            Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
         } else {
         }
         SmartDashboard.putNumber("xSpeed", xSpeed);
@@ -107,9 +114,14 @@ public class DriveAndOperate {
      * Reads the operator controller buttons and stores their current state
      */
     public void readOperatorController() {
-        shootWithVisionButton = m_OperatorController.getRawButton(1);
+        shootWithVisionButton = m_OperatorController.getRawButton(3);
         shootNormalButton = m_OperatorController.getRawButton(2);
         climbForwardButton = m_OperatorController.getRawButton(3);
         climbBackwardButton = m_OperatorController.getRawButton(4);
+        lineupButton = m_OperatorController.getRawButton(6); //right bumper
+    }
+
+    public Boolean shootIndex () {
+        return m_DriverRight.getRawButton(3);
     }
 }

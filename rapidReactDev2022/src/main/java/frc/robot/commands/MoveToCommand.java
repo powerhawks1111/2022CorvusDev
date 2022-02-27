@@ -14,7 +14,7 @@ public class MoveToCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_moveToSubsystem.translateToPosition(1, 1, 0.25);
+        m_moveToSubsystem.translateToPosition(0, 15, 0, 0.25, 0.25);
     }
 
     @Override

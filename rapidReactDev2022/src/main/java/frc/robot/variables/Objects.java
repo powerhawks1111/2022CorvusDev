@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.revrobotics.*;
 
+import frc.robot.DriveAndOperate;
 import frc.robot.SmartDashboardUpdater;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.commands.Scheduler;
