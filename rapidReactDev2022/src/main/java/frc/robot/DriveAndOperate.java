@@ -70,9 +70,9 @@ public class DriveAndOperate {
         }
 
         if (climbForwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(.3);
+            Objects.climbSubsystem.driveClimbMotor(.8);
         } else if (climbBackwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(-.3);
+            Objects.climbSubsystem.driveClimbMotor(-.8);
         } else {
             Motors.climbLeader.stopMotor();
         }

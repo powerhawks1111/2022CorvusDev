@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToCommand;
 import frc.robot.variables.Objects;
 
@@ -17,7 +18,10 @@ public class Autonomous {
 
     public void redPath() {
         if(!start) {
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 1, 1, 0, 0.25, 0.25));
+            // commandsList.add(new MoveToCommand(Objects.moveToSubsystem, -35, 3, 0, 0.4, 0.25));
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem,0 , 30, 0, 0.5, 0.25));
+            commandsList.add(new IntakeCommand(Objects.intakeAuto));
+
             start = true;
         }
         startAutonomous();

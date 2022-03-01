@@ -16,57 +16,42 @@ public class MoveToSubsystem extends SubsystemBase{
     public void periodic() {
         //called once per scheduler run
     }
+    public double turnToAngle (double desiredAngle, double rotSpeed) {
+        double currentAngle = (Objects.navx.getAngle() * Math.PI)/180;
+        double difference = closestAngleCalculator(currentAngle, desiredAngle);
+        double percentError = rotSpeed*(difference / (Math.PI)); //proportion error control
+        return percentError;
+    }
 
-    // public void translateToPosition(double desiredPositionX, double desiredPositionY, double speedScale) {
-    //     double xDisplace =  Objects.drivetrain.getCurrentPose2d().getX();
-    //     SmartDashboard.putNumber("xDisplace", xDisplace);
-    //     double yDisplace = Objects.drivetrain.getCurrentPose2d().getY();
-    //     SmartDashboard.putNumber("yDisplace", yDisplace);
-    //     double xMovement = desiredPositionX - xDisplace;
-    //     double yMovement = desiredPositionY - yDisplace;
-    //     if (Math.abs(xMovement)<0.25 && Math.abs(yMovement)<0.25) {
-    //         inRange = true;
-    //     } else {
-    //         inRange = false;
-    //     }
-    //     if (Math.abs(xMovement) >= 2 ) {
-    //         if (xMovement<0) {
-    //         xMovement = -speedScale;
-    //         } else {
-    //         xMovement = speedScale;
-    //         }
-    //         componentSpeeds[0] = xMovement;
-    //     } else {
-    //         componentSpeeds[0] =  Math.pow(speedScale * xMovement/2, 3);
-    //     }
+    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed) {
+        double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
+        double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
+        
+        double rotation = turnToAngle(rotationAngleDesired, speed);
 
-    //     if (Math.abs(yMovement) >= 2 ) {
-    //         if (yMovement<0) {
-    //             yMovement = -speedScale;
-    //         } else {
-    //             yMovement = speedScale;
-    //         }
-    //         componentSpeeds[1] = yMovement;    
-    //     } else {
-    //         componentSpeeds[1] = Math.pow(speedScale * yMovement/2, 3);
-    //     }
+        SmartDashboard.putNumber("angleValue",  rotation);
 
-    //     Objects.drivetrain.drive(componentSpeeds[0], componentSpeeds[1], 0, true);
-    // }
+        double xPositionError = -xPositionDesired - currentPoseX;
+        double yPositionError = -yPositionDesired - currentPoseY;
 
-    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationDesired, double driveSpeed, double rotateSpeed) {
-        double xDisplace =  Objects.drivetrain.getCurrentPose2d().getX() - xPositionDesired;
-        SmartDashboard.putNumber("xDisplace", xDisplace);
-        double yDisplace = Objects.drivetrain.getCurrentPose2d().getY() - yPositionDesired;
-        SmartDashboard.putNumber("yDisplace", yDisplace);
-        double currHeading = Objects.navx.getRotation2d().getRadians();
-        SmartDashboard.putNumber("navxHeading", currHeading);
+        SmartDashboard.putNumber("xPositionError", xPositionError);
+        SmartDashboard.putNumber("yPositionError", yPositionError);
 
-        double xTranslateSpeed = Math.min(Math.abs(xDisplace / 24), 1) * driveSpeed * (xDisplace - Math.abs(xDisplace));
-        double yTranslateSpeed = Math.min(Math.abs(yDisplace / 24), 1) * driveSpeed * (yDisplace - Math.abs(yDisplace));
-        double rotationSpeed = Math.min(closestAngleCalculator(currHeading, rotationDesired) / Math.PI, 1) * rotateSpeed;
+        double xTranslatePower = Math.min((xPositionError / 10), 1) * speed;
+        double yTranslatePower = Math.min((yPositionError / 10), 1) * speed;
 
-        Objects.drivetrain.drive(xTranslateSpeed, yTranslateSpeed, rotationSpeed, true);
+
+        if (Math.abs(xPositionError) < 0.75 && Math.abs(yPositionError) < 0.75) {
+            inRange = true;
+
+        }
+        else {
+            inRange = false;
+            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, false);
+        }
+        
+       
+
     }
 
     public boolean moveFinished () {

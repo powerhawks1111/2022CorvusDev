@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.IntakeAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MoveToSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
@@ -56,6 +57,7 @@ public class Objects {
     public static SmartDashboardUpdater smartDashboardUpdater = new SmartDashboardUpdater();
     public static HoodSubsystem hoodSubsystem = new HoodSubsystem();
     public static VisionSubsystem visionSubsystem = new VisionSubsystem();
+    public static IntakeAuto intakeAuto = new IntakeAuto();
 
     public static Scheduler scheduler = new Scheduler();
 

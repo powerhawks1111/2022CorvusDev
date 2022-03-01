@@ -54,10 +54,10 @@ public class HoodSubsystem {
      */
     public void adjustHood (double wantedPosition) { //runs in the background
         //gather vision output for distance to RPM/hood angle
+        SmartDashboard.putNumber("wantedHood", wantedPosition);
+        double motorPosition = wantedPosition * 122 + homePosition;
+        SmartDashboard.putNumber("HoodValue", motorPosition);
         if (isZeroed&& wantedPosition<homePosition) {
-            SmartDashboard.putNumber("wantedHood", wantedPosition);
-            double motorPosition = wantedPosition * 122 + homePosition;
-            SmartDashboard.putNumber("HoodValue", motorPosition);
             hoodPID.setReference(motorPosition, ControlType.kPosition);
         } else {
             Motors.hoodMotor.stopMotor();
