@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-public class VisionSubsystem {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+public class VisionSubsystem extends SubsystemBase{
     private double area;
     private double yAngle;
     private double xAngle;
@@ -45,7 +47,7 @@ public class VisionSubsystem {
     }
 
     public double turnToTargetPower() {
-        double turnKp = 1;
+        double turnKp = 0.85;
         double rotatePower = xAngle / (27 * turnKp);
         return rotatePower;
     }

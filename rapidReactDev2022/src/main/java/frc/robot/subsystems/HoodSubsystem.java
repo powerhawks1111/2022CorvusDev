@@ -12,9 +12,10 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
-public class HoodSubsystem {
+public class HoodSubsystem extends SubsystemBase{
     private SparkMaxPIDController hoodPID = Motors.hoodMotor.getPIDController();
     private double kP = 0.01;
     private double kI = 0;
@@ -42,7 +43,7 @@ public class HoodSubsystem {
 
             //reset encoder
         } else { //move motor down until we hit
-            Motors.hoodMotor.set(-.1);
+            Motors.hoodMotor.set(-.05);
             
         }
         
@@ -57,7 +58,7 @@ public class HoodSubsystem {
         SmartDashboard.putNumber("wantedHood", wantedPosition);
         double motorPosition = wantedPosition * 122 + homePosition;
         SmartDashboard.putNumber("HoodValue", motorPosition);
-        if (isZeroed&& wantedPosition<homePosition) {
+        if (isZeroed&& motorPosition>homePosition) {
             hoodPID.setReference(motorPosition, ControlType.kPosition);
         } else {
             Motors.hoodMotor.stopMotor();
@@ -68,6 +69,8 @@ public class HoodSubsystem {
         //set hood based on encoder
     }
 
-
+    public boolean getHoodZeroed() {
+        return isZeroed;
+    }
 
 }

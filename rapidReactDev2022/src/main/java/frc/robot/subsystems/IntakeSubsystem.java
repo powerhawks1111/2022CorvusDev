@@ -4,8 +4,9 @@ import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeSubsystem {
+public class IntakeSubsystem extends SubsystemBase{
 
     public IntakeSubsystem() {
 
@@ -17,6 +18,7 @@ public class IntakeSubsystem {
     public void extendIntake() {
         Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
         Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);
+        Motors.intakeLeader.set(.65);
     }
 
     /**
@@ -25,6 +27,7 @@ public class IntakeSubsystem {
     public void retractIntake() {
         Objects.intakePistonRight.set(DoubleSolenoid.Value.kForward);
         Objects.intakePistonLeft.set(DoubleSolenoid.Value.kForward);
+        Motors.intakeLeader.stopMotor();
     }
 
     /**

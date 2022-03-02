@@ -32,7 +32,7 @@ public class MoveToSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("angleValue",  rotation);
 
         double xPositionError = -xPositionDesired - currentPoseX;
-        double yPositionError = -yPositionDesired - currentPoseY;
+        double yPositionError = yPositionDesired - currentPoseY;
 
         SmartDashboard.putNumber("xPositionError", xPositionError);
         SmartDashboard.putNumber("yPositionError", yPositionError);
@@ -47,7 +47,7 @@ public class MoveToSubsystem extends SubsystemBase{
         }
         else {
             inRange = false;
-            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, false);
+            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, 0, true);
         }
         
        

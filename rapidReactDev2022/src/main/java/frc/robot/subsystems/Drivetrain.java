@@ -10,10 +10,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.variables.Objects;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Represents a swerve drive style drivetrain. */
-public class Drivetrain {
+public class Drivetrain extends SubsystemBase {
     public static final double kMaxSpeed = 3.68; // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 

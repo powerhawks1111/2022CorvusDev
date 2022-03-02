@@ -6,11 +6,12 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.RelativeEncoder;
 
-public class ShootSubsystem {
+public class ShootSubsystem extends SubsystemBase{
     private SparkMaxPIDController shooterPID = Motors.shooterLeader.getPIDController();
     private RelativeEncoder shooterEncoder = Motors.shooterLeader.getEncoder();
 

@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.MoveToSubsystem;
+import frc.robot.variables.Objects;
 
 public class MoveToCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateTield", "PMD.SingularField" })
@@ -22,10 +23,14 @@ public class MoveToCommand extends CommandBase {
     @Override
     public void execute() {
         m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed);
+        Objects.intakeSubsystem.extendIntake();
     }
 
     @Override
     public boolean isFinished() {
+        if (m_moveToSubsystem.moveFinished()){
+            Objects.intakeSubsystem.retractIntake();
+        }
         return m_moveToSubsystem.moveFinished();
     }
 

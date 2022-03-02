@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Relay.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Objects.smartDashboardUpdater.setupSmartDashboard();
+        Objects.navx.setAngleAdjustment(90);
     }
 
     @Override
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autoSelected = Objects.smartDashboardUpdater.getAutoSelected();
+        Objects.navx.setAngleAdjustment(90);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class Robot extends TimedRobot {
             break;
         }
         
-
+        Objects.visionSubsystem.updateVision();
         Objects.indexSubsystem.backgroundIndex();
     }
 
