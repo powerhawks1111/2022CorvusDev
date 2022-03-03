@@ -34,7 +34,7 @@ public class VisionSubsystem extends SubsystemBase{
         }
     }
     public double rpmFromVision () {
-        return (-22.185*yAngle) +1456;
+        return (-22.185*yAngle) +1406; //1456
     }
     public double calculateDistanceInches () {
         double cameraToGoalInches = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians);
@@ -42,7 +42,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public double distanceToRPM (double distanceToGoalInches) {
-        double rpm = (4.373 * distanceToGoalInches) + 1101;
+        double rpm = (4.373 * distanceToGoalInches) + 1001; //1051
         return rpm;
     }
 
@@ -68,7 +68,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public double hoodAngleFromVision () {
-        double motorPosition = -.00507*yAngle+.006908;
+        double motorPosition = -.00507*yAngle+.007908; //+.006908
         if (motorPosition <=0) {
              motorPosition = 0;
          }

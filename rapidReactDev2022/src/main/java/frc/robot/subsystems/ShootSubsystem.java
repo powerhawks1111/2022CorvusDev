@@ -26,10 +26,10 @@ public class ShootSubsystem extends SubsystemBase{
      * Constructor
      */
     public ShootSubsystem() {
-        kP = .0420; //0.031 ultimate gain //.1395 //.01
-        kI = 0.00000; //.00000001 .000000000001
-        kD = 0.0002; //.00125
-        kF = .000226;
+        kP = .003; //0.0420 ultimate gain //.1395 //.01
+        //kI = 0.000001; //.00000001 .000000000001
+        kD = 0.00002; // 0.0002
+        kF = .0002; //0.000226
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -79,7 +79,7 @@ public class ShootSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("errDelta", errDelta);
         SmartDashboard.putNumber("currentSetpoint", currentSetpoint);
         SmartDashboard.putNumber("currentVelocity", shooterEncoder.getVelocity());
-        return (currentSetpoint>0)&&(errDelta <= 50);
+        return (currentSetpoint>0)&&(errDelta <= 50); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
     
     }
 }

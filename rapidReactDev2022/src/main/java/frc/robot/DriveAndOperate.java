@@ -83,7 +83,7 @@ public class DriveAndOperate {
         }
 
         if (lineupButton) {
-            rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
+            rot = -Objects.moveToSubsystem.turnToAngle(90, 1.15);
         }
         
         if (testHood) {

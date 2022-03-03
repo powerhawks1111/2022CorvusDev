@@ -18,8 +18,8 @@ public class MoveToSubsystem extends SubsystemBase{
     }
     public double turnToAngle (double desiredAngle, double rotSpeed) {
         double currentAngle = (Objects.navx.getAngle() * Math.PI)/180;
-        double difference = closestAngleCalculator(currentAngle, desiredAngle);
-        double percentError = rotSpeed*(difference / (Math.PI)); //proportion error control
+        double difference = closestAngleCalculator(currentAngle, desiredAngle*(Math.PI/180));
+        double percentError = rotSpeed*(difference / 2 * (Math.PI)); //proportion error control
         return percentError;
     }
 
@@ -27,7 +27,7 @@ public class MoveToSubsystem extends SubsystemBase{
         double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
         double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
         
-        double rotation = turnToAngle(rotationAngleDesired, speed);
+        double rotation = -turnToAngle(rotationAngleDesired, speed);
 
         SmartDashboard.putNumber("angleValue",  rotation);
 
@@ -47,7 +47,7 @@ public class MoveToSubsystem extends SubsystemBase{
         }
         else {
             inRange = false;
-            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, 0, true);
+            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, true);
         }
         
        

@@ -29,7 +29,7 @@ public class MoveToCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if (m_moveToSubsystem.moveFinished()){
-            Objects.intakeSubsystem.retractIntake();
+            // Objects.intakeSubsystem.retractIntake();
         }
         return m_moveToSubsystem.moveFinished();
     }

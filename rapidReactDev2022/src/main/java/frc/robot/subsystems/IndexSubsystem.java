@@ -17,9 +17,10 @@ public class IndexSubsystem {
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
-    private double kP = 0.05;
+    private double kP = 0; //0.05
     private double kI = 0;
     private double kD = 0;
+    private double kFF = 0.000003;
     private boolean shoot = false;
     double currentPosition;
 
@@ -27,6 +28,7 @@ public class IndexSubsystem {
         indexPID.setP(kP);
         indexPID.setI(kI);
         indexPID.setD(kD);
+        indexPID.setFF(kFF);
     }
 
     /**
