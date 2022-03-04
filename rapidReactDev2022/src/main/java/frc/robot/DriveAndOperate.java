@@ -44,9 +44,10 @@ public class DriveAndOperate {
         double xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
         double ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(-driverYStick, 0.05)) * Drivetrain.kMaxSpeed;
         double rot = m_rotLimiter.calculate(-MathUtil.applyDeadband(driverRotateStick, 0.05)) * Drivetrain.kMaxAngularSpeed;
+
         boolean fieldRelative = true;
         Objects.visionSubsystem.updateVision();
-        //Objects.moveToSubsystem.translateToPosition(10, 10, .2);
+
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
             Objects.intakeSubsystem.runIntakeWheels(0.6);
@@ -55,7 +56,9 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.retractIntake();
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
-        Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
+
+
+        // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (testShooter && !shootNormalButton) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
             rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
@@ -77,10 +80,10 @@ public class DriveAndOperate {
             Motors.climbLeader.stopMotor();
         }
 
-        if (m_DriverLeft.getRawButton(1)) {
-            Objects.hoodSubsystem.setHoodZero();
+        // if (m_DriverLeft.getRawButton(1)) {
+        //     Objects.hoodSubsystem.setHoodZero();
             
-        }
+        // }
 
         if (lineupButton) {
             rot = -Objects.moveToSubsystem.turnToAngle(90, 1.15);
@@ -104,7 +107,6 @@ public class DriveAndOperate {
         driverRotateStick = m_DriverRight.getRawAxis(0);
         driverLeftHood = (m_DriverLeft.getRawAxis(3)+1)/2;
         driverRightShootThrottle = (m_DriverRight.getRawAxis(3)+1)/2;
-        intakeButton = m_DriverRight.getRawButton(1);
         testHood = m_DriverLeft.getRawButton(5);
         testShooter = m_DriverRight.getRawButton(5);
         
@@ -116,9 +118,28 @@ public class DriveAndOperate {
     public void readOperatorController() {
         shootWithVisionButton = m_OperatorController.getRawButton(3);
         shootNormalButton = m_OperatorController.getRawButton(2);
-        climbForwardButton = m_OperatorController.getRawButton(3);
-        climbBackwardButton = m_OperatorController.getRawButton(4);
         lineupButton = m_OperatorController.getRawButton(6); //right bumper
+
+        if (m_OperatorController.getPOV() == 0) {
+            climbForwardButton = true;
+            climbBackwardButton = false;
+        }
+        else if (m_OperatorController.getPOV() == 180) {
+            climbBackwardButton = true;
+            climbForwardButton = false;
+        }
+        else {
+            climbForwardButton = false;
+            climbBackwardButton = false;
+        }
+
+        if (m_OperatorController.getRawButton(6)){
+            intakeButton = true;
+        }
+        else if (m_OperatorController.getRawButton(5)) {
+            intakeButton = false;
+        }
+
     }
 
     public Boolean shootIndex () {
