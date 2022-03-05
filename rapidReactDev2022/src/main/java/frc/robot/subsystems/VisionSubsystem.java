@@ -17,13 +17,14 @@ public class VisionSubsystem extends SubsystemBase{
     double targetHeight = 114;
     double cameraAngle = 35; //degrees
     double cameraAngleRadians = cameraAngle * (Math.PI / 180);
+    boolean shoot = false;
     
     public void updateVision () {
         area = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
         yAngle = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         xAngle = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean(false);
-
+        SmartDashboard.putNumber("xAngle", xAngle);
         
 
         SmartDashboard.putNumber("yAngle", yAngle);
@@ -46,6 +47,7 @@ public class VisionSubsystem extends SubsystemBase{
         return rpm;
     }
 
+
     public double turnToTargetPower() {
         double turnKp = 0.85;
         double rotatePower = xAngle / (27 * turnKp);
@@ -66,6 +68,11 @@ public class VisionSubsystem extends SubsystemBase{
         updateVision();
         return validTargets;
     }
+
+    public boolean linedUp() {
+        return (Math.abs(xAngle)<6);
+    }
+
 
     public double hoodAngleFromVision () {
         double motorPosition = -.00507*yAngle+.007908; //+.006908

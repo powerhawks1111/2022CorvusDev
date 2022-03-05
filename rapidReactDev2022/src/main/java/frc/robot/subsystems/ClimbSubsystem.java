@@ -34,6 +34,10 @@ public class ClimbSubsystem {
         climbPID.setReference(maxEncoderVal, ControlType.kPosition);
     }
 
+    public void rotateClimb(double speed) {
+        Motors.climbHigher.set(speed);
+    }
+
     /**
      * Uses PID to retract the climb in to its minimum height
      */

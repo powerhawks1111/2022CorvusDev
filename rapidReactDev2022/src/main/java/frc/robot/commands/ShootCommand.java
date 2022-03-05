@@ -29,14 +29,15 @@ public class ShootCommand extends CommandBase{
     @Override
     public void execute() {
             m_shootSubsystem.setShooterRPM(m_visionSubsystem.rpmFromVision());
-            double rot = -m_visionSubsystem.turnToTargetPower() ;
+            double rot = -m_visionSubsystem.turnToTargetPower()/2;
             m_hoodSubsystem.adjustHood(m_visionSubsystem.hoodAngleFromVision());
+            m_shootSubsystem.shoot(true);
             m_drivetrain.drive(0, 0, rot, true);
     }
 
     public boolean isFinished() {
         if(!Objects.indexShooterSensor.get()) {
-
+        m_shootSubsystem.shoot(false);
         m_shootSubsystem.spoolUp();
         }
         return !Objects.indexShooterSensor.get();

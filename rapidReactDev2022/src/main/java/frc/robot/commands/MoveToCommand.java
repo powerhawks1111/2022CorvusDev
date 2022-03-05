@@ -9,8 +9,9 @@ public class MoveToCommand extends CommandBase {
     private final MoveToSubsystem m_moveToSubsystem;
 
     private double desiredX, desiredY, desiredHeading, translateSpeed, rotationSpeed, m_decelParam;
+    private boolean m_intake; 
 
-    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam) {
+    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam, boolean intake) {
         m_moveToSubsystem = moveToSubsystem;
         desiredX = desiredPositionX;
         desiredY = desiredPositionY;
@@ -18,13 +19,18 @@ public class MoveToCommand extends CommandBase {
         translateSpeed = strafeSpeed;
         rotationSpeed = rotateSpeed;
         m_decelParam = decelParam;
+        m_intake = intake;
         addRequirements(moveToSubsystem);
     }
 
     @Override
     public void execute() {
         m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam);
-        Objects.intakeSubsystem.extendIntake();
+        if (m_intake) {
+            Objects.intakeSubsystem.extendIntake();
+        } else {
+            Objects.intakeSubsystem.retractIntake();
+        }
     }
 
     @Override

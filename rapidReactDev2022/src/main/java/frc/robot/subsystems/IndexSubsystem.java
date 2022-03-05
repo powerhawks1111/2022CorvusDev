@@ -16,15 +16,15 @@ import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.07; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.65                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
     private double kP = 0; //0.05
     private double kI = 0;
     private double kD = 0;
-    private double kFF = 0.000018;
-    private double shoot = 0;
+    private double kFF = 0.000008;
+    private boolean m_eject = false;
     double currentPosition;
 
     public IndexSubsystem () {
@@ -42,8 +42,8 @@ public class IndexSubsystem {
         indexPID.setReference(power, ControlType.kDutyCycle);
     }
 
-    public void updateCentered(double rotation) {
-        shoot = 0;
+    public void updateEject(Boolean eject) {
+        m_eject = eject;
     }
 
     /**
@@ -53,9 +53,11 @@ public class IndexSubsystem {
      */
     public void backgroundIndex() {
         
-        
-        if (Objects.shootSubsystem.shouldFeedToShooter()) { //
-            driveIndexWheel(-.15);//fast to shoot
+        if (m_eject) {
+            driveIndexWheel(1);
+        }
+        else if (Objects.shootSubsystem.shouldFeedToShooter()) { //
+            driveIndexWheel(-1);//fast to shoot
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);

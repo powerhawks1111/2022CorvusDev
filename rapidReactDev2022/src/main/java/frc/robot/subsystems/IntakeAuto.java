@@ -28,7 +28,7 @@ public class IntakeAuto extends SubsystemBase{
     public void extendIntake() {
         Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
         Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);
-        Motors.intakeLeader.set(.55);
+        Motors.intakeLeader.set(1);
     }
 
     /**

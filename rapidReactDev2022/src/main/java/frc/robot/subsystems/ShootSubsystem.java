@@ -21,6 +21,7 @@ public class ShootSubsystem extends SubsystemBase{
     private double kF;
     private double currentSetpoint;
     private double rpmTolerance;
+    boolean m_shoot = false;
 
     /**
      * Constructor
@@ -35,7 +36,9 @@ public class ShootSubsystem extends SubsystemBase{
         shooterPID.setD(kD);
         shooterPID.setFF(kF);
     }
-
+    public void shoot (Boolean shoot) {
+        m_shoot = shoot;
+    }
     /**
      * Uses spark max onboard PID to set the shooter RPM
      *
@@ -69,7 +72,7 @@ public class ShootSubsystem extends SubsystemBase{
 
     }
     public void spoolUp () {
-        shooterPID.setReference(1800, ControlType.kVelocity);
+        shooterPID.setReference(Objects.visionSubsystem.rpmFromVision()-200, ControlType.kVelocity);
     }
     /**
      * Called by background index function to decide whether balls should be
@@ -81,7 +84,7 @@ public class ShootSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("errDelta", errDelta);
         SmartDashboard.putNumber("currentSetpoint", currentSetpoint);
         SmartDashboard.putNumber("currentVelocity", shooterEncoder.getVelocity());
-        return (currentSetpoint>0)&&(errDelta <= 50); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
+        return (currentSetpoint>0)&&(errDelta <= 50)&&Objects.visionSubsystem.linedUp()&&m_shoot; //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
     
     }
 }

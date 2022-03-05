@@ -7,6 +7,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.Drivetrain;
 
 
@@ -16,9 +17,9 @@ public class DriveAndOperate {
     private final Joystick m_DriverController = new Joystick(0);
     public final Joystick m_OperatorController = new Joystick(1);
 
-    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(4);
+    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(4);
+    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(4);
 
 
     private double driverXStick = 0;
@@ -34,6 +35,8 @@ public class DriveAndOperate {
     private boolean visionShoot = false;
     //private double driverRightShootThrottle = 0;
     private boolean ejectBall = false;
+    private boolean rotateBackwardButton = false;
+    private boolean rotateForwardButton = false;
 
 
     /**
@@ -46,6 +49,15 @@ public class DriveAndOperate {
 
         boolean fieldRelative = true;
         Objects.visionSubsystem.updateVision();
+        Objects.shootSubsystem.shoot(visionShoot);
+
+        if (rotateForwardButton) {
+            Objects.climbSubsystem.rotateClimb(-.1);
+        } else if (rotateBackwardButton) {
+            Objects.climbSubsystem.rotateClimb(.1);
+        } else {
+            Motors.climbHigher.stopMotor();
+        }
 
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
@@ -56,15 +68,15 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
 
-
+        Objects.indexSubsystem.updateEject(ejectBall);
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (visionShoot) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-            rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
+            rot = -Objects.visionSubsystem.turnToTargetPower();
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
         } else if (spoolUpButton) {
-            Objects.shootSubsystem.setShooterRPM(1400);
+            Objects.shootSubsystem.spoolUp();
         }
         else {
             Motors.shooterLeader.stopMotor();
@@ -105,7 +117,8 @@ public class DriveAndOperate {
      * Reads the operator controller buttons and stores their current state
      */
     public void readOperatorController() {
-        spoolUpButton = m_OperatorController.getRawButton(2);
+        spoolUpButton = m_OperatorController.getRawButton(1);
+        ejectBall = m_OperatorController.getRawButton(2);
         //lineupButton = m_OperatorController.getRawButton(6); //right bumper
 
         if (m_OperatorController.getPOV() == 0) {
@@ -127,7 +140,19 @@ public class DriveAndOperate {
         else if (m_OperatorController.getRawButton(5)) {
             intakeButton = false;
         }
-
+        
+        if (m_OperatorController.getPOV() == 90) {
+            rotateForwardButton = true;
+            rotateBackwardButton = false;
+        }
+        else if (m_OperatorController.getPOV() == 270) {
+            rotateBackwardButton = true;
+            rotateForwardButton = false;
+        }
+        else {
+            rotateForwardButton = false;
+            rotateBackwardButton = false;
+        }
     }
 
     public Boolean shootIndex () {
