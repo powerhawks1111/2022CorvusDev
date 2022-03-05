@@ -36,7 +36,8 @@ public class ShootCommand extends CommandBase{
 
     public boolean isFinished() {
         if(!Objects.indexShooterSensor.get()) {
-        //    Motors.shooterLeader.set(0);
+
+        m_shootSubsystem.spoolUp();
         }
         return !Objects.indexShooterSensor.get();
     }

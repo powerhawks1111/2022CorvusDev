@@ -8,21 +8,22 @@ public class MoveToCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateTield", "PMD.SingularField" })
     private final MoveToSubsystem m_moveToSubsystem;
 
-    private double desiredX, desiredY, desiredHeading, translateSpeed, rotationSpeed;
+    private double desiredX, desiredY, desiredHeading, translateSpeed, rotationSpeed, m_decelParam;
 
-    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed) {
+    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam) {
         m_moveToSubsystem = moveToSubsystem;
         desiredX = desiredPositionX;
         desiredY = desiredPositionY;
         desiredHeading = heading;
         translateSpeed = strafeSpeed;
         rotationSpeed = rotateSpeed;
+        m_decelParam = decelParam;
         addRequirements(moveToSubsystem);
     }
 
     @Override
     public void execute() {
-        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed);
+        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam);
         Objects.intakeSubsystem.extendIntake();
     }
 

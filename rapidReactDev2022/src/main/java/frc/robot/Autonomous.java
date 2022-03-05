@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.HoodZeroCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToCommand;
@@ -20,18 +21,22 @@ public class Autonomous {
         commandsList = new ArrayList<CommandBase>();
     }
 
-    public void redPath() {
+    public void redPath() { //THREE BALL AUTO
         if(!start) {
             commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 90, 0.5, 0.15));
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 95, .95, 0.75, 10));
             //commandsList.add(new IntakeCommand(Objects.intakeAuto));
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 180, 0.5, 0.25));
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 0, 80, 180, .65, .95));
+        
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -10, 90, 175, 1.5, .75, 10));
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 26, 242, 160, 2, .75, 20));
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 80, 135, 2, .75, 30));
 
+            commandsList.add(new ReadyToShootCommand());
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
             //commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
@@ -46,22 +51,31 @@ public class Autonomous {
 
     public void orangePath() {
         if (!start) {
-            commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 0, 0.5, 0.25));
-            // commandsList.add(new IntakeCommand(Objects.intakeAuto));
-            // commandsList.add(new ReadyToShootCommand());
-            // commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
-            // commandsList.add(new ReadyToShootCommand());
-            // commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 35, 60, 0, .5, .25));
+            commandsList.add(new ParallelCommandGroup(new HoodZeroCommand(Objects.hoodSubsystem), new MoveToCommand(Objects.moveToSubsystem, 37, 0, 90, 0.5, 0.15, 10)));
+            // commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
+            // commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 90, 0.5, 0.15));
+            //commandsList.add(new IntakeCommand(Objects.intakeAuto));
+            commandsList.add(new ReadyToShootCommand());
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
+            commandsList.add(new ReadyToShootCommand());
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 180, 0.5, 0.25, 10));
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 0, 80, 180, .65, .95, 10));
+
+            commandsList.add(new ReadyToShootCommand());
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
             start=true;
         }
         startAutonomous();
 
     }
 
-    public void yellowPath() {
-
+    public void yellowPath() { //TWO BALL
+        commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 90, 0.5, 0.15, 10));
+            //commandsList.add(new IntakeCommand(Objects.intakeAuto));
+            commandsList.add(new ReadyToShootCommand());
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem));
     }
 
     public void greenPath() {

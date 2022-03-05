@@ -23,7 +23,7 @@ public class MoveToSubsystem extends SubsystemBase{
         return percentError;
     }
 
-    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed) {
+    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed, double decelParam) {
         double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
         double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
         
@@ -37,8 +37,8 @@ public class MoveToSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("xPositionError", xPositionError);
         SmartDashboard.putNumber("yPositionError", yPositionError);
 
-        double xTranslatePower = Math.min((xPositionError / 10), 1) * speed;
-        double yTranslatePower = Math.min((yPositionError / 10), 1) * speed;
+        double xTranslatePower = Math.min((xPositionError / decelParam), 1) * speed;
+        double yTranslatePower = Math.min((yPositionError / decelParam), 1) * speed;
 
 
         if (Math.abs(xPositionError) < 0.75 && Math.abs(yPositionError) < 0.75) {

@@ -7,21 +7,24 @@ import frc.robot.DriveAndOperate;
 
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.RelativeEncoder;
 import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.065; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.07; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
     private double kP = 0; //0.05
     private double kI = 0;
     private double kD = 0;
-    private double kFF = 0.000003;
-    private boolean shoot = false;
+    private double kFF = 0.000018;
+    private double shoot = 0;
     double currentPosition;
 
     public IndexSubsystem () {
@@ -39,8 +42,8 @@ public class IndexSubsystem {
         indexPID.setReference(power, ControlType.kDutyCycle);
     }
 
-    public void shoot(Boolean value) {
-        shoot = value;
+    public void updateCentered(double rotation) {
+        shoot = 0;
     }
 
     /**
@@ -57,6 +60,7 @@ public class IndexSubsystem {
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
+            SmartDashboard.putString("index", "running");
             awaitingBall = true;
         } else if (Objects.indexShooterSensor.get() && awaitingBall) {
             awaitingBall = false;
@@ -67,6 +71,7 @@ public class IndexSubsystem {
         } else {
             awaitingBall = false;
             indexPID.setReference(Motors.indexLeader.getEncoder().getPosition(), ControlType.kPosition);
+            SmartDashboard.putString("index", "not running");
             //indexPID.setReference(currentPosition, ControlType.kPosition);
         }
     }

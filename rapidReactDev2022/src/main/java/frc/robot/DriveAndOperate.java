@@ -13,9 +13,8 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveAndOperate {
 
     // private final XboxController m_controller = new XboxController(0);
-    private final Joystick m_DriverLeft = new Joystick(0);
-    public final Joystick m_DriverRight = new Joystick(1);
-    public final Joystick m_OperatorController = new Joystick(2);
+    private final Joystick m_DriverController = new Joystick(0);
+    public final Joystick m_OperatorController = new Joystick(1);
 
     private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
@@ -26,15 +25,15 @@ public class DriveAndOperate {
     private double driverYStick = 0;
     private double driverRotateStick = 0;
     private boolean intakeButton = false;
-    private boolean shootWithVisionButton = false;
-    private boolean shootNormalButton = false;
+    //private boolean shootWithVisionButton = false;
+    private boolean spoolUpButton = false;
     private boolean climbForwardButton = false;
     private boolean climbBackwardButton = false;
-    private double driverLeftHood = 0;
-    private boolean testHood = false;
-    private boolean testShooter = false;
-    private boolean lineupButton = false;
-    private double driverRightShootThrottle = 0;
+    //private double driverLeftHood = 0;
+    //private boolean testHood = false;
+    private boolean visionShoot = false;
+    //private double driverRightShootThrottle = 0;
+    private boolean ejectBall = false;
 
 
     /**
@@ -59,13 +58,13 @@ public class DriveAndOperate {
 
 
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
-        if (testShooter && !shootNormalButton) {
+        if (visionShoot) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
             rot = -Objects.visionSubsystem.turnToTargetPower() * 2;
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
-        } else if (shootNormalButton) {
-            Objects.shootSubsystem.setShooterRPM(1800);
+        } else if (spoolUpButton) {
+            Objects.shootSubsystem.setShooterRPM(1400);
         }
         else {
             Motors.shooterLeader.stopMotor();
@@ -85,14 +84,6 @@ public class DriveAndOperate {
             
         // }
 
-        if (lineupButton) {
-            rot = -Objects.moveToSubsystem.turnToAngle(90, 1.15);
-        }
-        
-        if (testHood) {
-            Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
-        } else {
-        }
         SmartDashboard.putNumber("xSpeed", xSpeed);
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot + 0.0001, fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
@@ -102,13 +93,11 @@ public class DriveAndOperate {
      * Reads the driver controller buttons and stores their current state
      */
     public void readDriverController() {
-        driverXStick = m_DriverLeft.getRawAxis(0);
-        driverYStick = m_DriverLeft.getRawAxis(1);
-        driverRotateStick = m_DriverRight.getRawAxis(0);
-        driverLeftHood = (m_DriverLeft.getRawAxis(3)+1)/2;
-        driverRightShootThrottle = (m_DriverRight.getRawAxis(3)+1)/2;
-        testHood = m_DriverLeft.getRawButton(5);
-        testShooter = m_DriverRight.getRawButton(5);
+        driverXStick =  m_DriverController.getRawAxis(0);
+        driverYStick =  m_DriverController.getRawAxis(1);
+        driverRotateStick = m_DriverController.getRawAxis(4);
+        //driverLeftHood = (m_DriverController.getRawAxis(3)+1)/2;
+        visionShoot = m_DriverController.getRawButton(6);
         
     }
     
@@ -116,9 +105,8 @@ public class DriveAndOperate {
      * Reads the operator controller buttons and stores their current state
      */
     public void readOperatorController() {
-        shootWithVisionButton = m_OperatorController.getRawButton(3);
-        shootNormalButton = m_OperatorController.getRawButton(2);
-        lineupButton = m_OperatorController.getRawButton(6); //right bumper
+        spoolUpButton = m_OperatorController.getRawButton(2);
+        //lineupButton = m_OperatorController.getRawButton(6); //right bumper
 
         if (m_OperatorController.getPOV() == 0) {
             climbForwardButton = true;
@@ -143,6 +131,7 @@ public class DriveAndOperate {
     }
 
     public Boolean shootIndex () {
-        return m_DriverRight.getRawButton(3);
+        // return m_DriverRight.getRawButton(3);
+        return false;
     }
 }

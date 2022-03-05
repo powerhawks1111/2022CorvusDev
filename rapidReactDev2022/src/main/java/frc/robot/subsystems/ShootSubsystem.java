@@ -68,7 +68,9 @@ public class ShootSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
 
     }
-
+    public void spoolUp () {
+        shooterPID.setReference(1800, ControlType.kVelocity);
+    }
     /**
      * Called by background index function to decide whether balls should be
      * fed into the shooter
