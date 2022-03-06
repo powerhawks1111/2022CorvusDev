@@ -84,7 +84,7 @@ public class ShootSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("errDelta", errDelta);
         SmartDashboard.putNumber("currentSetpoint", currentSetpoint);
         SmartDashboard.putNumber("currentVelocity", shooterEncoder.getVelocity());
-        return (currentSetpoint>0)&&(errDelta <= 50)&&Objects.visionSubsystem.linedUp()&&m_shoot; //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
+        return (currentSetpoint>0)&&(errDelta <= 50)&&m_shoot; //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
     
     }
 }

@@ -2,6 +2,9 @@ package frc.robot;
 
 import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,9 +20,9 @@ public class DriveAndOperate {
     private final Joystick m_DriverController = new Joystick(0);
     public final Joystick m_OperatorController = new Joystick(1);
 
-    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(4);
-    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(4);
-    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(4);
+    private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(10);
+    private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(10);
+    private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(10);
 
 
     private double driverXStick = 0;
@@ -37,6 +40,9 @@ public class DriveAndOperate {
     private boolean ejectBall = false;
     private boolean rotateBackwardButton = false;
     private boolean rotateForwardButton = false;
+    private boolean lowGoal = false;
+    private boolean resetNavx = false;
+    private boolean manualButton = false;
 
 
     /**
@@ -69,16 +75,21 @@ public class DriveAndOperate {
         }
 
         Objects.indexSubsystem.updateEject(ejectBall);
+        Objects.indexSubsystem.updateManual(manualButton);
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (visionShoot) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-            rot = -Objects.visionSubsystem.turnToTargetPower();
+            rot = -Objects.visionSubsystem.turnToTargetPower()*(.80);
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
         } else if (spoolUpButton) {
             Objects.shootSubsystem.spoolUp();
         }
-        else {
+        else if (lowGoal) {
+            Objects.shootSubsystem.setShooterRPM(900);
+            SmartDashboard.putBoolean("isShootingButton", false);
+            Objects.hoodSubsystem.adjustHood(.1);
+        } else {
             Motors.shooterLeader.stopMotor();
             SmartDashboard.putBoolean("isShootingButton", false);
         }
@@ -90,14 +101,16 @@ public class DriveAndOperate {
         } else {
             Motors.climbLeader.stopMotor();
         }
-
+        if (resetNavx) {
+            Objects.navx.reset();
+        }
         // if (m_DriverLeft.getRawButton(1)) {
         //     Objects.hoodSubsystem.setHoodZero();
             
         // }
 
         SmartDashboard.putNumber("xSpeed", xSpeed);
-        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot + 0.0001, fieldRelative); //final movement; sends drive values to swerve
+        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
     }
 
@@ -119,6 +132,9 @@ public class DriveAndOperate {
     public void readOperatorController() {
         spoolUpButton = m_OperatorController.getRawButton(1);
         ejectBall = m_OperatorController.getRawButton(2);
+        lowGoal= m_OperatorController.getRawButton(4);
+        resetNavx = m_OperatorController.getRawButton(8);
+        manualButton = m_OperatorController.getRawButton(3);
         //lineupButton = m_OperatorController.getRawButton(6); //right bumper
 
         if (m_OperatorController.getPOV() == 0) {

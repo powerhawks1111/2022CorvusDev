@@ -41,7 +41,7 @@ public class MoveToSubsystem extends SubsystemBase{
         double yTranslatePower = Math.min((yPositionError / decelParam), 1) * speed;
 
 
-        if (Math.abs(xPositionError) < 0.75 && Math.abs(yPositionError) < 0.75) {
+        if (Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) {
             inRange = true;
 
         }

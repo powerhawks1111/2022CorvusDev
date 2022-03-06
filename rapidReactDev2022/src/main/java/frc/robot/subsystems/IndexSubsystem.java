@@ -16,7 +16,7 @@ import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.65                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
@@ -25,6 +25,7 @@ public class IndexSubsystem {
     private double kD = 0;
     private double kFF = 0.000008;
     private boolean m_eject = false;
+    private boolean m_manual = false;
     double currentPosition;
 
     public IndexSubsystem () {
@@ -46,6 +47,10 @@ public class IndexSubsystem {
         m_eject = eject;
     }
 
+    public void updateManual (Boolean manual) {
+        m_manual = manual;
+    }
+
     /**
      * Runs constantly in the autonomous and teleop periodic functions
      * <br><br>
@@ -55,6 +60,8 @@ public class IndexSubsystem {
         
         if (m_eject) {
             driveIndexWheel(1);
+        } else if (m_manual) {
+            driveIndexWheel(-1);
         }
         else if (Objects.shootSubsystem.shouldFeedToShooter()) { //
             driveIndexWheel(-1);//fast to shoot
