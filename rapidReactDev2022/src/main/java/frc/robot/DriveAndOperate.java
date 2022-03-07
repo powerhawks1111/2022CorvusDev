@@ -79,7 +79,7 @@ public class DriveAndOperate {
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (visionShoot) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-            rot = -Objects.visionSubsystem.turnToTargetPower()*(.80);
+            rot = -Objects.visionSubsystem.turnToTargetPower()*(.76);
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
         } else if (spoolUpButton) {

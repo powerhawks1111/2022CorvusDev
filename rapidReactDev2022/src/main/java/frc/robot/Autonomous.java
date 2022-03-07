@@ -27,12 +27,12 @@ public class Autonomous {
             commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 29, 1, 90, .65, 0.75, 10, true)); //FIRST BALL
             //commandsList.add(new IntakeCommand(Objects.intakeAuto));
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1600)); //SHOOT First two
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550)); //SHOOT First two
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1600));
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550));
         
             commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 90, 175, 1, .75, 20, true));//SECOND BALL
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 28, 234, 175, 1.4, .75, 40, true));//THIRD BALL
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 30, 238, 175, 1.4, .75, 40, true));//THIRD BALL,  OG 28, 234
             //commandsList.add(new IntakeCommand( Objects.intakeAuto));
     
             commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 120, 135, 1.4, .75, 30, true)); //GO HOME
@@ -58,7 +58,7 @@ public class Autonomous {
             // commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 37, 0, 90, 0.5, 0.15));
             //commandsList.add(new IntakeCommand(Objects.intakeAuto));
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1600));
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550));
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, Objects.visionSubsystem.rpmFromVision()));
             commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -10, 90, 180, .65, .95, 10, true)); //SECOND BALL
@@ -76,9 +76,9 @@ public class Autonomous {
             commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 29, 1, 90, 0.5, 0.15, 10, true)); //FIRST BALL
             //commandsList.add(new IntakeCommand(Objects.intakeAuto));
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1600));
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550));
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1600));
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550));
             commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 20, 90, 90, 0.5, 0.15, 10, false));
     }
 
