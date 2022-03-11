@@ -37,4 +37,10 @@ public class IntakeSubsystem extends SubsystemBase{
     public void runIntakeWheels(double intakeSpeed) {
         Motors.intakeLeader.set(intakeSpeed);
     }
+
+    public void ejectBall() {
+        Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
+        Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);
+        Motors.intakeLeader.set(-1);
+    }
 }

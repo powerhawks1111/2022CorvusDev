@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.CAN;
 
 public class Motors {
     public static CANSparkMax shooterLeader = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // public static CANSparkMax shooterFollower = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax shooterFollower = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     public static CANSparkMax hoodMotor = new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 

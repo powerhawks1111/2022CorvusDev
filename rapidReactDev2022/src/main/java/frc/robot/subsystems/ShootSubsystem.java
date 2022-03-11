@@ -27,10 +27,10 @@ public class ShootSubsystem extends SubsystemBase{
      * Constructor
      */
     public ShootSubsystem() {
-        kP = .003; //0.0420 ultimate gain //.1395 //.01
+        kP = 0.0012; //0.0420 ultimate gain //.1395 //.01 //.003
         //kI = 0.000001; //.00000001 .000000000001
-        kD = 0.00002; // 0.0002
-        kF = .0002; //0.000226
+        kD = 0.00002; // 0.0002 //.00002
+        kF = .0002315; //0.0002
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -47,32 +47,15 @@ public class ShootSubsystem extends SubsystemBase{
      */
     public void setShooterRPM(double shooterRPM) {
         currentSetpoint = shooterRPM;
-        if (Math.abs(currentSetpoint-Motors.shooterLeader.getEncoder().getVelocity())>100) {
-            // kP = .00000005;
-            // kI = 0.00000;
-            // kD = .00000;
-            // kF = 0.00000004810;
-            // shooterPID.setP(kP);
-            // shooterPID.setI(kI);
-            // shooterPID.setD(kD);
-            // shooterPID.setFF(kF);
-        } else {
-            // kP = .050; //0.031 ultimate gain //.1395 //.01
-            // kI = 0.00000; //.00000001 .000000000001
-            // kD = 0; //.00125
-            // kF = .000002;
-            // shooterPID.setP(kP);
-            // shooterPID.setI(kI);
-            // shooterPID.setD(kD);
-            // shooterPID.setFF(kF);
-        }
         SmartDashboard.putNumber("Setpoint", shooterRPM);
         shooterPID.setReference(shooterRPM, ControlType.kVelocity);
+        Motors.shooterFollower.follow(Motors.shooterLeader, true);
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
 
     }
     public void spoolUp () {
         shooterPID.setReference(Objects.visionSubsystem.rpmFromVision()-200, ControlType.kVelocity);
+        Motors.shooterFollower.follow(Motors.shooterLeader, true);
     }
     /**
      * Called by background index function to decide whether balls should be

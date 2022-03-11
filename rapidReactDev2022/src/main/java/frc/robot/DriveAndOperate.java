@@ -67,7 +67,10 @@ public class DriveAndOperate {
 
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
-            Objects.intakeSubsystem.runIntakeWheels(0.6);
+            Objects.intakeSubsystem.runIntakeWheels(1);
+        }
+        else if (ejectBall) {
+            Objects.intakeSubsystem.ejectBall();
         }
         else {
             Objects.intakeSubsystem.retractIntake();
@@ -75,6 +78,7 @@ public class DriveAndOperate {
         }
 
         Objects.indexSubsystem.updateEject(ejectBall);
+        
         Objects.indexSubsystem.updateManual(manualButton);
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (visionShoot) {
@@ -86,7 +90,7 @@ public class DriveAndOperate {
             Objects.shootSubsystem.spoolUp();
         }
         else if (lowGoal) {
-            Objects.shootSubsystem.setShooterRPM(900);
+            Objects.shootSubsystem.setShooterRPM(1500);
             SmartDashboard.putBoolean("isShootingButton", false);
             Objects.hoodSubsystem.adjustHood(.1);
         } else {
@@ -110,7 +114,7 @@ public class DriveAndOperate {
         // }
 
         SmartDashboard.putNumber("xSpeed", xSpeed);
-        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
+        //Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
     }
 
