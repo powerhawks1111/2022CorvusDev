@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DutyCycle;
 public class SwerveModule {
         private static final double kWheelDiameter = 4; // 0.1016 M wheel diameter (4")
         private static final double kWheelCircumference = Math.PI * kWheelDiameter;
-        private static final double rpmToVelocityScaler = (kWheelCircumference / 8.16) / 60; //SDS Mk3 standard gear ratio from motor to wheel, divide by 60 to go from secs to mins
+        private static final double rpmToVelocityScaler = (kWheelCircumference / 6.12) / 60; //SDS Mk3 standard gear ratio from motor to wheel, divide by 60 to go from secs to mins
 
         private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
         private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -92,7 +92,7 @@ public class SwerveModule {
             
 
             final double signedAngleDifference = closestAngleCalculator(getTurnEncoderRadians(), state.angle.getRadians());
-            double rotateMotorPercentPower = signedAngleDifference / (2 * Math.PI); //proportion error control
+            double rotateMotorPercentPower = signedAngleDifference / (2* Math.PI); //proportion error control //2
 
             m_driveMotor.set((state.speedMetersPerSecond / Drivetrain.kMaxSpeed) * Math.cos(rotateMotorPercentPower));
             m_turningMotor.set(1.6 * rotateMotorPercentPower);

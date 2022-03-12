@@ -114,7 +114,7 @@ public class DriveAndOperate {
         // }
 
         SmartDashboard.putNumber("xSpeed", xSpeed);
-        //Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
+        Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we?
     }
 
@@ -139,7 +139,8 @@ public class DriveAndOperate {
         lowGoal= m_OperatorController.getRawButton(4);
         resetNavx = m_OperatorController.getRawButton(8);
         manualButton = m_OperatorController.getRawButton(3);
-        //lineupButton = m_OperatorController.getRawButton(6); //right bumper
+        intakeButton = m_OperatorController.getRawButton(6);
+                //lineupButton = m_OperatorController.getRawButton(6); //right bumper
 
         if (m_OperatorController.getPOV() == 0) {
             climbForwardButton = true;
@@ -154,12 +155,7 @@ public class DriveAndOperate {
             climbBackwardButton = false;
         }
 
-        if (m_OperatorController.getRawButton(6)){
-            intakeButton = true;
-        }
-        else if (m_OperatorController.getRawButton(5)) {
-            intakeButton = false;
-        }
+
         
         if (m_OperatorController.getPOV() == 90) {
             rotateForwardButton = true;

@@ -24,18 +24,18 @@ public class Autonomous {
     public void redPath() { //FOUR BALL AUTO
         if(!start) {
             commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 29, 1, 90, .65, 0.75, 10, true)); //FIRST BALL
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 29, 1, 90, .45, 0.75, 10, true)); //FIRST BALL
             //commandsList.add(new IntakeCommand(Objects.intakeAuto));
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550)); //SHOOT First two
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, true, 1550));
         
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 90, 175, 1, .75, 20, true));//SECOND BALL
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 30, 238, 175, 1.4, .75, 40, true));//THIRD BALL,  OG 28, 234
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 90, 175, .5, .75, 20, true));//SECOND BALL
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 30, 238, 175, .5, .75, 40, true));//THIRD BALL,  OG 28, 234
             //commandsList.add(new IntakeCommand( Objects.intakeAuto));
     
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 120, 135, 1.4, .75, 30, true)); //GO HOME
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -5, 12, 36, 1, .75, 30, true)); //GO HOME
 
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, Objects.visionSubsystem.rpmFromVision()));
