@@ -83,16 +83,16 @@ public class DriveAndOperate {
         // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
         if (visionShoot) {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-            rot = -Objects.visionSubsystem.turnToTargetPower()*(.76);
+            rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
             SmartDashboard.putBoolean("isShootingButton", true);
         } else if (spoolUpButton) {
             Objects.shootSubsystem.spoolUp();
         }
         else if (lowGoal) {
-            Objects.shootSubsystem.setShooterRPM(1500);
+            Objects.shootSubsystem.setShooterRPM(950);
             SmartDashboard.putBoolean("isShootingButton", false);
-            Objects.hoodSubsystem.adjustHood(.1);
+            Objects.hoodSubsystem.adjustHood(.15);
         } else {
             Motors.shooterLeader.stopMotor();
             SmartDashboard.putBoolean("isShootingButton", false);

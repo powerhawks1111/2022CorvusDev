@@ -14,6 +14,7 @@ import com.revrobotics.RelativeEncoder;
 public class ShootSubsystem extends SubsystemBase{
     private SparkMaxPIDController shooterPID = Motors.shooterLeader.getPIDController();
     private RelativeEncoder shooterEncoder = Motors.shooterLeader.getEncoder();
+    private SparkMaxPIDController shooterFollowerPID = Motors.shooterFollower.getPIDController();
 
     private double kP; //0.031 ultimate gain //.1395 //.01
     private double kI; //.00000001 .000000000001
@@ -27,14 +28,24 @@ public class ShootSubsystem extends SubsystemBase{
      * Constructor
      */
     public ShootSubsystem() {
-        kP = 0.0012; //0.0420 ultimate gain //.1395 //.01 //.003
+        kP = 0.00012; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
         //kI = 0.000001; //.00000001 .000000000001
-        kD = 0.00002; // 0.0002 //.00002
-        kF = .0002315; //0.0002
+        kD = 0.000019; // 0.0002 //.00002
+        kF = .000197; //0.0002
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
         shooterPID.setFF(kF);
+
+        shooterFollowerPID.setP(kP);
+        shooterFollowerPID.setI(kI);
+        shooterFollowerPID.setD(kD);
+        shooterFollowerPID.setFF(kF);
+
+
+        Motors.shooterLeader.setClosedLoopRampRate(2);
+        Motors.shooterFollower.setClosedLoopRampRate(2);
+
     }
     public void shoot (Boolean shoot) {
         m_shoot = shoot;
@@ -49,10 +60,16 @@ public class ShootSubsystem extends SubsystemBase{
         currentSetpoint = shooterRPM;
         SmartDashboard.putNumber("Setpoint", shooterRPM);
         shooterPID.setReference(shooterRPM, ControlType.kVelocity);
+        //shooterFollowerPID.setReference(-shooterRPM, ControlType.kVelocity);
         Motors.shooterFollower.follow(Motors.shooterLeader, true);
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
+        SmartDashboard.putNumber("MotorFollowerRPM", Motors.shooterFollower.getEncoder().getVelocity());
 
     }
+
+
+
+    
     public void spoolUp () {
         shooterPID.setReference(Objects.visionSubsystem.rpmFromVision()-200, ControlType.kVelocity);
         Motors.shooterFollower.follow(Motors.shooterLeader, true);

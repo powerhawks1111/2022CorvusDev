@@ -37,7 +37,7 @@ public class ShootCommand extends CommandBase{
             } else {
             m_shootSubsystem.setShooterRPM(m_visionSubsystem.rpmFromVision());
             }
-            double rot = -m_visionSubsystem.turnToTargetPower()*.4;
+            double rot = -m_visionSubsystem.turnToTargetPower()*.45;
             m_hoodSubsystem.adjustHood(m_visionSubsystem.hoodAngleFromVision());
             m_shootSubsystem.shoot(true);
             m_drivetrain.drive(0, 0, rot, true);

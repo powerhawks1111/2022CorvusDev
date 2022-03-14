@@ -35,7 +35,7 @@ public class VisionSubsystem extends SubsystemBase{
         }
     }
     public double rpmFromVision () {
-        return (-22.185*yAngle) +1456; //1456
+        return (-22.185*yAngle) +1496; //1456
     }
     public double calculateDistanceInches () {
         double cameraToGoalInches = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians);
