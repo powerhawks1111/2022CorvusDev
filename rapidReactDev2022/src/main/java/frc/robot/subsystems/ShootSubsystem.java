@@ -43,8 +43,8 @@ public class ShootSubsystem extends SubsystemBase{
         shooterFollowerPID.setFF(kF);
 
 
-        Motors.shooterLeader.setClosedLoopRampRate(2);
-        Motors.shooterFollower.setClosedLoopRampRate(2);
+        Motors.shooterLeader.setClosedLoopRampRate(0.3);
+        Motors.shooterFollower.setClosedLoopRampRate(0.3);
 
     }
     public void shoot (Boolean shoot) {
@@ -63,7 +63,9 @@ public class ShootSubsystem extends SubsystemBase{
         //shooterFollowerPID.setReference(-shooterRPM, ControlType.kVelocity);
         Motors.shooterFollower.follow(Motors.shooterLeader, true);
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
+        SmartDashboard.putNumber("ShooterLeaderCurrent", Motors.shooterLeader.getOutputCurrent());
         SmartDashboard.putNumber("MotorFollowerRPM", Motors.shooterFollower.getEncoder().getVelocity());
+        SmartDashboard.putNumber("ShooterFollowerCurrent", Motors.shooterFollower.getOutputCurrent());
 
     }
 
