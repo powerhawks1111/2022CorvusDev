@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Objects.visionSubsystem.turnOnLeds();
         autoSelected = Objects.smartDashboardUpdater.getAutoSelected();
         if (autoSelected == "Green Path") {
          Objects.navx.setAngleAdjustment(-135);
