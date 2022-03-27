@@ -25,7 +25,7 @@ public class ShootSubsystem extends SubsystemBase{
     boolean m_shoot = false;
 
     /**
-     * Constructor
+     * Constructor to set pid gains
      */
     public ShootSubsystem() {
         kP = 0.00012; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
@@ -71,7 +71,9 @@ public class ShootSubsystem extends SubsystemBase{
 
 
 
-    
+    /**
+     * Function to let the operator spool up the motors so they are ready before we shoot
+     */
     public void spoolUp () {
         shooterPID.setReference(Objects.visionSubsystem.rpmFromVision()-200, ControlType.kVelocity);
         Motors.shooterFollower.follow(Motors.shooterLeader, true);

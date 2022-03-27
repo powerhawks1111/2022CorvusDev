@@ -85,6 +85,9 @@ public class IndexSubsystem {
         }
     }
 
+    /**
+     * Deprecated test function when initially testing motors
+     */
     public void testMotors () {
         Motors.intakeLeader.set(.55);
         Motors.indexLeader.set(-.25); //BACKWARD
@@ -93,8 +96,11 @@ public class IndexSubsystem {
 
     }
 
+    /**
+     * Stops the intake, index, shooter, and hood motors
+     */
     public void stopMotors () {
-        Motors.intakeLeader.stopMotor();;
+        Motors.intakeLeader.stopMotor();
         Motors.indexLeader.stopMotor();
         Motors.shooterLeader.stopMotor();
         Motors.hoodMotor.stopMotor();

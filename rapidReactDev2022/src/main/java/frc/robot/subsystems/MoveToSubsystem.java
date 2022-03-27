@@ -23,6 +23,14 @@ public class MoveToSubsystem extends SubsystemBase{
         return percentError;
     }
 
+    /**
+     * Autonomous focused function to move the robot to a particular location on the field relative to its starting position
+     * @param xPositionDesired x position in inches
+     * @param yPositionDesired y position in inches
+     * @param rotationAngleDesired rotation angle in degrees
+     * @param speed speed to drive, 0-1
+     * @param decelParam parameter to set the slowdown curve for stopping at the end of the path (number of inches from endpoint to start slowing down)
+     */
     public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed, double decelParam) {
         double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
         double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
@@ -54,6 +62,10 @@ public class MoveToSubsystem extends SubsystemBase{
 
     }
 
+    /**
+     * Whether the robot has arrived at the destination
+     * @return Boolean of whether or not the robot has completed its translation
+     */
     public boolean moveFinished () {
         return inRange;
     }

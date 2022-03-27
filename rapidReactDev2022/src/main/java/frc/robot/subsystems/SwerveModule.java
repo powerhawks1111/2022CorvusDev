@@ -11,6 +11,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
@@ -30,6 +33,8 @@ public class SwerveModule {
 
         private final CANSparkMax m_driveMotor;
         private final CANSparkMax m_turningMotor;
+
+        private final SparkMaxPIDController m_drivePID;
 
         private final RelativeEncoder m_driveEncoder;
         private final DigitalInput m_TurnEncoderInput;
@@ -52,6 +57,13 @@ public class SwerveModule {
             // can spark max motor controller objects
             m_driveMotor = new CANSparkMax(driveMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
             m_turningMotor = new CANSparkMax(turningMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+            m_driveMotor.setOpenLoopRampRate(0.1);
+
+            m_drivePID = m_driveMotor.getPIDController();
+            m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+            m_drivePID.setSmartMotionMaxAccel(0.2, 0);
+            m_drivePID.setReference(0, CANSparkMax.ControlType.kSmartMotion);
 
             //spark max built-in encoder
             m_driveEncoder = m_driveMotor.getEncoder();

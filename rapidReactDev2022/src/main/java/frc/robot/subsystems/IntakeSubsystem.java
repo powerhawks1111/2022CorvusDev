@@ -31,13 +31,16 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     /**
-     * Rund the intake motor
+     * Runs the intake motor
      * @param intakeSpeed -1 to +1 speed to run the intake motor
      */
     public void runIntakeWheels(double intakeSpeed) {
         Motors.intakeLeader.set(intakeSpeed);
     }
 
+    /**
+     * Runs the intake backwards to force balls back out
+     */
     public void ejectBall() {
         Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
         Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);

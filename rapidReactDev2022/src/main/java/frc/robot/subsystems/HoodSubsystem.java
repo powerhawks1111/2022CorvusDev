@@ -32,6 +32,10 @@ public class HoodSubsystem extends SubsystemBase{
         hoodPID.setI(kI);
         hoodPID.setD(kD);
     }
+
+    /**
+     * Moves the hood to its home position based on the limit switch
+     */
     public void setHoodZero () {
         if (Objects.limitSwitch.get()) { //replace with limit switch
             //turn motors off

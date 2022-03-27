@@ -25,6 +25,9 @@ public class DriveAndOperate {
     private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(10);
 
 
+    /**
+     * State of all buttons
+     */
     private double driverXStick = 0;
     private double driverYStick = 0;
     private double driverRotateStick = 0;
@@ -46,7 +49,7 @@ public class DriveAndOperate {
 
 
     /**
-     * Calculates drive values and sends the values to swerve drive
+     * Runs subsystems on the robot based on pre-evaluated driver and operator inputs
      */
     public void driveAndOperate () {
         double xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverXStick, 0.05)) * Drivetrain.kMaxSpeed;
@@ -57,6 +60,9 @@ public class DriveAndOperate {
         Objects.visionSubsystem.updateVision();
         Objects.shootSubsystem.shoot(visionShoot);
 
+        /**
+         * CLIMB
+         */
         if (rotateForwardButton) {
             Objects.climbSubsystem.rotateClimb(-.1);
         } else if (rotateBackwardButton) {
@@ -65,6 +71,10 @@ public class DriveAndOperate {
             Motors.climbHigher.stopMotor();
         }
 
+
+        /**
+         * INTAKE
+         */
         if (intakeButton) {
             Objects.intakeSubsystem.extendIntake();
             Objects.intakeSubsystem.runIntakeWheels(1);
@@ -77,11 +87,16 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
 
-        Objects.indexSubsystem.updateEject(ejectBall);
+        Objects.indexSubsystem.updateEject(ejectBall); //update flags for background index
         
-        Objects.indexSubsystem.updateManual(manualButton);
-        // Objects.indexSubsystem.shoot(m_DriverRight.getRawButton(3));
+        Objects.indexSubsystem.updateManual(manualButton); //update flags for background index
+
+
+        /**
+         * SHOOT
+         */
         if (visionShoot) {
+            Objects.visionSubsystem.turnOnLeds();
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
             rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
@@ -94,10 +109,14 @@ public class DriveAndOperate {
             SmartDashboard.putBoolean("isShootingButton", false);
             Objects.hoodSubsystem.adjustHood(.15);
         } else {
+            Objects.visionSubsystem.turnOffLeds();
             Motors.shooterLeader.stopMotor();
             SmartDashboard.putBoolean("isShootingButton", false);
         }
 
+        /**
+         * OTHER CLIMB
+         */
         if (climbForwardButton) {
             Objects.climbSubsystem.driveClimbMotor(.8);
         } else if (climbBackwardButton) {
@@ -105,17 +124,19 @@ public class DriveAndOperate {
         } else {
             Motors.climbLeader.stopMotor();
         }
+
+        /**
+         * RESET NAVX
+         */
         if (resetNavx) {
             Objects.navx.reset();
         }
-        // if (m_DriverLeft.getRawButton(1)) {
-        //     Objects.hoodSubsystem.setHoodZero();
-            
-        // }
 
-        SmartDashboard.putNumber("xSpeed", xSpeed);
+        /**
+         * DRIVE THE ROBOT
+         */
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
-        Objects.drivetrain.updateOdometry(); //where are we?
+        Objects.drivetrain.updateOdometry(); //where are we? --- idk, we're all lost
     }
 
     /**
@@ -126,7 +147,7 @@ public class DriveAndOperate {
         driverYStick =  m_DriverController.getRawAxis(1);
         driverRotateStick = m_DriverController.getRawAxis(4);
         //driverLeftHood = (m_DriverController.getRawAxis(3)+1)/2;
-        visionShoot = m_DriverController.getRawButton(6);
+        visionShoot = m_DriverController.getRawButton(6); // right bumper lineup and shoot
         
     }
     
@@ -134,14 +155,14 @@ public class DriveAndOperate {
      * Reads the operator controller buttons and stores their current state
      */
     public void readOperatorController() {
-        spoolUpButton = m_OperatorController.getRawButton(1);
-        ejectBall = m_OperatorController.getRawButton(2);
-        lowGoal= m_OperatorController.getRawButton(4);
-        resetNavx = m_OperatorController.getRawButton(8);
-        manualButton = m_OperatorController.getRawButton(3);
-        intakeButton = m_OperatorController.getRawButton(6);
-                //lineupButton = m_OperatorController.getRawButton(6); //right bumper
+        spoolUpButton = m_OperatorController.getRawButton(1); // a button
+        ejectBall = m_OperatorController.getRawButton(2); // b button
+        lowGoal= m_OperatorController.getRawButton(4); // y button
+        resetNavx = m_OperatorController.getRawButton(8) && m_OperatorController.getRawButton(7); //center buttons menu and hamburger buttons
+        manualButton = m_OperatorController.getRawButton(3); //manual index x button
+        intakeButton = m_OperatorController.getRawButton(6); //right bumper
 
+        //old climb
         if (m_OperatorController.getPOV() == 0) {
             climbForwardButton = true;
             climbBackwardButton = false;
@@ -156,7 +177,7 @@ public class DriveAndOperate {
         }
 
 
-        
+        //old climb
         if (m_OperatorController.getPOV() == 90) {
             rotateForwardButton = true;
             rotateBackwardButton = false;
@@ -169,10 +190,5 @@ public class DriveAndOperate {
             rotateForwardButton = false;
             rotateBackwardButton = false;
         }
-    }
-
-    public Boolean shootIndex () {
-        // return m_DriverRight.getRawButton(3);
-        return false;
     }
 }
