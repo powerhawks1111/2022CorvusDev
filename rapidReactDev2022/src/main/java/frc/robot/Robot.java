@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
         driveAndOperate.readOperatorController();
         driveAndOperate.driveAndOperate();       
         Objects.indexSubsystem.backgroundIndex();
+        driveAndOperate.testJoystickRead();
     }
 
 

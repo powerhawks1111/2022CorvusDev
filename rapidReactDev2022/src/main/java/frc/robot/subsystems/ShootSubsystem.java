@@ -28,10 +28,10 @@ public class ShootSubsystem extends SubsystemBase{
      * Constructor to set pid gains
      */
     public ShootSubsystem() {
-        kP = 0.00012; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
+        kP = 0.002; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
         //kI = 0.000001; //.00000001 .000000000001
-        kD = 0.000019; // 0.0002 //.00002
-        kF = .000197; //0.0002
+        kD = 0.00019; // 0.0002 //.00002
+        kF = .00022; //0.0002
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -43,8 +43,8 @@ public class ShootSubsystem extends SubsystemBase{
         shooterFollowerPID.setFF(kF);
 
 
-        Motors.shooterLeader.setClosedLoopRampRate(0.3);
-        Motors.shooterFollower.setClosedLoopRampRate(0.3);
+        Motors.shooterLeader.setClosedLoopRampRate(0.01);
+        Motors.shooterFollower.setClosedLoopRampRate(0.01);
 
     }
     public void shoot (Boolean shoot) {

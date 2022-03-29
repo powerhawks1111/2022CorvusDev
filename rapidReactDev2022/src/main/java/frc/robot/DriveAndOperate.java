@@ -32,14 +32,15 @@ public class DriveAndOperate {
     private double driverYStick = 0;
     private double driverRotateStick = 0;
     private boolean intakeButton = false;
-    //private boolean shootWithVisionButton = false;
+    private boolean shootWithVisionButton = false;
+    private boolean resetHood = false; 
     private boolean spoolUpButton = false;
     private boolean climbForwardButton = false;
     private boolean climbBackwardButton = false;
     //private double driverLeftHood = 0;
-    //private boolean testHood = false;
+    private double testHood = 0;
     private boolean visionShoot = false;
-    //private double driverRightShootThrottle = 0;
+    private double driverShootThrottle = 0;
     private boolean ejectBall = false;
     private boolean rotateBackwardButton = false;
     private boolean rotateForwardButton = false;
@@ -114,6 +115,11 @@ public class DriveAndOperate {
             SmartDashboard.putBoolean("isShootingButton", false);
         }
 
+        if(resetHood) {
+            Objects.hoodSubsystem.setHoodZero();
+        } else if (!shootWithVisionButton) {
+            Motors.hoodMotor.stopMotor();
+    }
         /**
          * OTHER CLIMB
          */
@@ -190,5 +196,13 @@ public class DriveAndOperate {
             rotateForwardButton = false;
             rotateBackwardButton = false;
         }
+    }
+
+    public void testJoystickRead () {
+        driverShootThrottle = -(m_DriverController.getRawAxis(3)+1)*2500;
+        testHood = -(m_OperatorController.getRawAxis(3)+1)*.3;
+        resetHood = m_DriverController.getRawButton(5);
+        shootWithVisionButton = m_DriverController.getRawButton(1);
+        
     }
 }
