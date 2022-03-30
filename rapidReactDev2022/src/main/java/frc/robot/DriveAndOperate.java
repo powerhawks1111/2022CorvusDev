@@ -92,34 +92,42 @@ public class DriveAndOperate {
         
         Objects.indexSubsystem.updateManual(manualButton); //update flags for background index
 
-
+        Objects.visionSubsystem.turnOnLeds();
         /**
          * SHOOT
          */
-        if (visionShoot) {
-            Objects.visionSubsystem.turnOnLeds();
-            Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-            rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
-            Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
-            SmartDashboard.putBoolean("isShootingButton", true);
-        } else if (spoolUpButton) {
-            Objects.shootSubsystem.spoolUp();
-        }
-        else if (lowGoal) {
-            Objects.shootSubsystem.setShooterRPM(950);
-            SmartDashboard.putBoolean("isShootingButton", false);
-            Objects.hoodSubsystem.adjustHood(.15);
-        } else {
-            Objects.visionSubsystem.turnOffLeds();
-            Motors.shooterLeader.stopMotor();
-            SmartDashboard.putBoolean("isShootingButton", false);
-        }
+        // if (visionShoot) {
+        //     Objects.visionSubsystem.turnOnLeds();
+        //     Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
+        //     rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
+        //     Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
+        //     SmartDashboard.putBoolean("isShootingButton", true);
+        // } else if (spoolUpButton) {
+        //     Objects.shootSubsystem.spoolUp();
+        // }
+        // else if (lowGoal) {
+        //     Objects.shootSubsystem.setShooterRPM(950);
+        //     SmartDashboard.putBoolean("isShootingButton", false);
+        //     Objects.hoodSubsystem.adjustHood(.15);
+        // } else {
+        //     Objects.visionSubsystem.turnOffLeds();
+        //     Motors.shooterLeader.stopMotor();
+        //     SmartDashboard.putBoolean("isShootingButton", false);
+        // }
 
         if(resetHood) {
             Objects.hoodSubsystem.setHoodZero();
         } else if (!shootWithVisionButton) {
             Motors.hoodMotor.stopMotor();
     }
+
+        if (shootWithVisionButton) {
+            Objects.hoodSubsystem.adjustHood(testHood);
+            Objects.shootSubsystem.setShooterRPM(driverShootThrottle);
+        } else {
+            Motors.shooterLeader.stopMotor();
+            Motors.shooterFollower.stopMotor();
+        }
         /**
          * OTHER CLIMB
          */
@@ -199,8 +207,8 @@ public class DriveAndOperate {
     }
 
     public void testJoystickRead () {
-        driverShootThrottle = -(m_DriverController.getRawAxis(3)+1)*2500;
-        testHood = -(m_OperatorController.getRawAxis(3)+1)*.3;
+        driverShootThrottle = (m_DriverController.getRawAxis(3)+1)*1000 + 1000;
+        testHood = (m_OperatorController.getRawAxis(3)+1)*.1;
         resetHood = m_DriverController.getRawButton(5);
         shootWithVisionButton = m_DriverController.getRawButton(1);
         

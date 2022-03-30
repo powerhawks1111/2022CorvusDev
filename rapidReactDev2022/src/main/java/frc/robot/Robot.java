@@ -84,8 +84,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        driveAndOperate.readDriverController();
-        driveAndOperate.readOperatorController();
+        //driveAndOperate.readDriverController();
+        //driveAndOperate.readOperatorController();
         driveAndOperate.driveAndOperate();       
         Objects.indexSubsystem.backgroundIndex();
         driveAndOperate.testJoystickRead();

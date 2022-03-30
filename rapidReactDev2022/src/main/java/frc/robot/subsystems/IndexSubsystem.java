@@ -64,7 +64,7 @@ public class IndexSubsystem {
             driveIndexWheel(-1);
         }
         else if (Objects.shootSubsystem.shouldFeedToShooter()) { //
-            driveIndexWheel(-1);//fast to shoot
+            driveIndexWheel(-.7);//fast to shoot
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
