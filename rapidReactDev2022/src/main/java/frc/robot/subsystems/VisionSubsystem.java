@@ -42,8 +42,24 @@ public class VisionSubsystem extends SubsystemBase{
      * Calculates the shooter rpm based on the limelight distance regression model
      * @return Necessary shooter RPM
      */
-    public double rpmFromVision () {
+    public double rpmFromVisionOld () {
         return (-22.185*yAngle) +1496; //1456
+    }
+
+    /**
+     * Calculates the shooter rpm based on the limelight distance cubic regression model
+     * @return Shooter RPM
+     */
+    public double rpmFromVision () {
+        return (-0.12906 * Math.pow(yAngle, 3)) + (2.167459 * Math.pow(yAngle, 2)) - (3.7657413 * yAngle) + (1345.6);
+    }
+
+    /**
+     * Calculates the shooter rpm based on the limelight distance quadratic regression model
+     * @return Shooter RPM
+     */
+    public double rpmFromVisionQuad () {
+        return (1.66 * Math.pow(yAngle, 2)) - (14.65 * yAngle) + (1371);
     }
 
     /**
@@ -106,7 +122,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Hood motor value for hood PID reference (number of motor rotations)
      */
     public double hoodAngleFromVision () {
-        double motorPosition = -.00507*yAngle+.007908; //+.006908
+        double motorPosition = 3 * Math.pow(2.718, -0.5 * (yAngle + 15));
         if (motorPosition <=0) {
              motorPosition = 0;
          }
