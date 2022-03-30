@@ -122,7 +122,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Hood motor value for hood PID reference (number of motor rotations)
      */
     public double hoodAngleFromVision () {
-        double motorPosition = 3 * Math.pow(2.718, -0.5 * (yAngle + 15));
+        double motorPosition = (-0.001493 * yAngle) + (0.01114);
         if (motorPosition <=0) {
              motorPosition = 0;
          }
