@@ -64,7 +64,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Shooter RPM
      */
     public double rpmFromVision () {
-        return 25*(((1.7083*Math.pow(yAngle, 2)-16.1634*yAngle+1288.11))/9); //c = 1358.11;
+        return (0.680456 * Math.pow(yAngle, 2))-(31.10814 * yAngle) + (3845.7302); //c = 1358.11;
 
     }
 
@@ -154,7 +154,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Hood motor value for hood PID reference (number of motor rotations)
      */
     public double hoodAngleFromVision () {
-       double motorPosition = (((-.004493 * yAngle) + .027258));
+       double motorPosition = (((-.005403 * yAngle) + .04157));
         if (motorPosition <0) {
              motorPosition = 0;
          }

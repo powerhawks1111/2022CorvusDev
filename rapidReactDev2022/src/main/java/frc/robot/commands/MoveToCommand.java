@@ -42,8 +42,9 @@ public class MoveToCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_moveToSubsystem.moveFinished()){
-            // Objects.intakeSubsystem.retractIntake();
+        if (m_pixy == true && Objects.indexFirstSensor.get()){
+            m_moveToSubsystem.stopDriving();
+            return true;
         }
         return m_moveToSubsystem.moveFinished();
     }

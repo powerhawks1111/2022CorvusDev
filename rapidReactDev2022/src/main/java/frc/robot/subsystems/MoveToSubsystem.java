@@ -152,4 +152,8 @@ public class MoveToSubsystem extends SubsystemBase{
         }
         return signedDiff;
     }
+
+    public void stopDriving() {
+        Objects.drivetrain.drive(0, 0, 0, true);
+    }
 }

@@ -87,10 +87,10 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         driveAndOperate.readDriverController();
         driveAndOperate.readOperatorController();
+        // driveAndOperate.testJoystickRead();
         driveAndOperate.driveAndOperate();       
         Objects.indexSubsystem.backgroundIndex();
         Objects.visionSubsystem.updateVision();
-        //driveAndOperate.testJoystickRead();
     }
 
 

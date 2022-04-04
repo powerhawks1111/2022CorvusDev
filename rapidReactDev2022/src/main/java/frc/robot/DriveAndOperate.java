@@ -69,23 +69,21 @@ public class DriveAndOperate {
         Objects.climbRightRaise.set(DoubleSolenoid.Value.kForward);
 
         Motors.climbLeader.set(climbRotateSpeed);
-        
+
+
+        // if (shootWithVisionButton) {
+        //     Objects.shootSubsystem.setShooterRPM(driverShootThrottle);
+        //     Objects.hoodSubsystem.adjustHood(testHood);
+        // }
+        // else {
+        //     Motors.shooterLeader.stopMotor();
+        //     Motors.shooterFollower.stopMotor();
+        //     Motors.hoodMotor.stopMotor();
+        // }
         
 
         if (raiseClimb) {
             Motors.climbLeader.set(climbRotateSpeed);
-        }
-
-      
-        /**
-         * CLIMB
-         */
-        if (rotateForwardButton) {
-            Objects.climbSubsystem.rotateClimb(-.1);
-        } else if (rotateBackwardButton) {
-            Objects.climbSubsystem.rotateClimb(.1);
-        } else {
-            Motors.climbHigher.stopMotor();
         }
 
        
@@ -222,16 +220,16 @@ public class DriveAndOperate {
         //     rotateForwardButton = false;
         //     rotateBackwardButton = false;
         // }
-        climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        // climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
         
     }
 
     public void testJoystickRead () {
-        // driverShootThrottle = (m_DriverController.getRawAxis(3)+1)*1000 + 1000;
+        // driverShootThrottle = (((m_DriverController.getRawAxis(3)+1))*1000 + 1000) * (25/9);
         // testHood = (m_OperatorController.getRawAxis(3)+1)*.1;
         // resetHood = m_DriverController.getRawButton(5);
         // shootWithVisionButton = m_DriverController.getRawButton(1);
-        //climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        // climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
         // intakeButton = m_OperatorController.getRawButton(6); //right bumper
 
     }

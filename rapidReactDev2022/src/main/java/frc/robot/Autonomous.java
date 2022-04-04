@@ -40,7 +40,7 @@ public class Autonomous {
             commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 40, -253, 175, .85, .6, 40, true, true));//THIRD BALL,  OG 28, 234
             //commandsList.add(new IntakeCommand( Objects.intakeAuto));
     
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 20, -48, 135, 1, .6, 40, true, false)); //GO HOME
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 20, -48, 115, 1, .6, 40, true, false)); //GO HOME
 
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, Objects.visionSubsystem.rpmFromVision()));
@@ -116,7 +116,7 @@ public class Autonomous {
             commandsList.add(new HoodZeroCommand(Objects.hoodSubsystem));
 
             //pickup the first ball
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -20, -90, 175, .8, .6, 20, true, false));//SECOND BALL
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, -15, -90, 175, .8, .6, 20, true, false));//SECOND BALL
 
             //shoot both balls
             commandsList.add(new ReadyToShootCommand());
@@ -125,24 +125,24 @@ public class Autonomous {
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, 0));
             
             //pickup player station ball
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 17, -252, 160, .8, .6, 40, true, false));//THIRD BALL,  OG 28, 234
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 17, -252, 160, .8, .6, 40, true, true));//THIRD BALL,  OG 28, 234
             
             //wait for human player rollout
             commandsList.add (new ReadyToShootCommand());
             commandsList.add(new IntakeCommand(Objects.intakeAuto));
 
             //drive to shooting position
-            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 10, 0, 135, 1, .6, 40, true, false)); //GO HOME
+            commandsList.add (new MoveToCommand(Objects.moveToSubsystem, 10, 0, 115, 1, .6, 40, true, false)); //GO HOME
 
             //shoot both balls
             commandsList.add(new ReadyToShootCommand());
-            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, 0)); //SHOOT First two
+            commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, Objects.visionSubsystem.rpmFromVision())); //SHOOT First two
             commandsList.add(new ReadyToShootCommand());
             commandsList.add (new ShootCommand(Objects.shootSubsystem, Objects.hoodSubsystem, Objects.drivetrain, Objects.visionSubsystem, false, Objects.visionSubsystem.rpmFromVision()));
             
 
             //pickup final ball
-            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 35, 0, 90, .5, 0.7, 10, true, true)); //FIRST BALL
+            commandsList.add(new MoveToCommand(Objects.moveToSubsystem, 30, 0, 90, .4, 0.7, 12, true, true)); //FIRST BALL
 
             //shoot final ball
             commandsList.add(new ReadyToShootCommand());
