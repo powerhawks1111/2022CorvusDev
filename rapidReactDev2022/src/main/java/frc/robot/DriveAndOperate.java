@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 public class DriveAndOperate {
@@ -28,6 +29,8 @@ public class DriveAndOperate {
     /**
      * State of all buttons
      */
+    private double climbRotateSpeed = 0;
+    private boolean rotateDown = false;
     private double driverXStick = 0;
     private double driverYStick = 0;
     private double driverRotateStick = 0;
@@ -35,8 +38,9 @@ public class DriveAndOperate {
     private boolean shootWithVisionButton = false;
     private boolean resetHood = false; 
     private boolean spoolUpButton = false;
-    private boolean climbForwardButton = false;
-    private boolean climbBackwardButton = false;
+    private boolean releaseTopHooks = false;
+    private boolean releaseBottomHooks = false;
+    private boolean loveMuffin = false;
     //private double driverLeftHood = 0;
     private double testHood = 0;
     private boolean visionShoot = false;
@@ -47,7 +51,7 @@ public class DriveAndOperate {
     private boolean lowGoal = false;
     private boolean resetNavx = false;
     private boolean manualButton = false;
-
+    private boolean raiseClimb = false;
 
     /**
      * Runs subsystems on the robot based on pre-evaluated driver and operator inputs
@@ -61,6 +65,18 @@ public class DriveAndOperate {
         Objects.visionSubsystem.updateVision();
         Objects.shootSubsystem.shoot(visionShoot);
 
+        Objects.climbLeftRaise.set(DoubleSolenoid.Value.kForward);
+        Objects.climbRightRaise.set(DoubleSolenoid.Value.kForward);
+
+        Motors.climbLeader.set(climbRotateSpeed);
+        
+        
+
+        if (raiseClimb) {
+            Motors.climbLeader.set(climbRotateSpeed);
+        }
+
+      
         /**
          * CLIMB
          */
@@ -72,7 +88,7 @@ public class DriveAndOperate {
             Motors.climbHigher.stopMotor();
         }
 
-
+       
         /**
          * INTAKE
          */
@@ -96,49 +112,30 @@ public class DriveAndOperate {
         /**
          * SHOOT
          */
-        // if (visionShoot) {
-        //     Objects.visionSubsystem.turnOnLeds();
-        //     Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
-        //     rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
-        //     Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
-        //     SmartDashboard.putBoolean("isShootingButton", true);
-        // } else if (spoolUpButton) {
-        //     Objects.shootSubsystem.spoolUp();
-        // }
-        // else if (lowGoal) {
-        //     Objects.shootSubsystem.setShooterRPM(950);
-        //     SmartDashboard.putBoolean("isShootingButton", false);
-        //     Objects.hoodSubsystem.adjustHood(.15);
-        // } else {
-        //     Objects.visionSubsystem.turnOffLeds();
-        //     Motors.shooterLeader.stopMotor();
-        //     SmartDashboard.putBoolean("isShootingButton", false);
-        // }
+        if (visionShoot) {
+            Objects.visionSubsystem.turnOnLeds();
+            Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
+            rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
+            Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
+            SmartDashboard.putBoolean("isShootingButton", true);
+        } else if (spoolUpButton) {
+            Objects.shootSubsystem.spoolUp();
+        }
+        else if (lowGoal) {
+            Objects.shootSubsystem.setShooterRPM(950);
+            SmartDashboard.putBoolean("isShootingButton", false);
+            Objects.hoodSubsystem.adjustHood(.15);
+        } else {
+            Objects.visionSubsystem.turnOffLeds();
+            Motors.shooterLeader.stopMotor();
+            SmartDashboard.putBoolean("isShootingButton", false);
+        }
 
         if(resetHood) {
             Objects.hoodSubsystem.setHoodZero();
-        } else if (!shootWithVisionButton) {
-            Motors.hoodMotor.stopMotor();
-    }
-
-        if (shootWithVisionButton) {
-            Objects.hoodSubsystem.adjustHood(testHood);
-            Objects.shootSubsystem.setShooterRPM(driverShootThrottle);
-        } else {
-            Motors.shooterLeader.stopMotor();
-            Motors.shooterFollower.stopMotor();
+        
         }
-        /**
-         * OTHER CLIMB
-         */
-        if (climbForwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(.8);
-        } else if (climbBackwardButton) {
-            Objects.climbSubsystem.driveClimbMotor(-.8);
-        } else {
-            Motors.climbLeader.stopMotor();
-        }
-
+        
         /**
          * RESET NAVX
          */
@@ -151,8 +148,11 @@ public class DriveAndOperate {
          */
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we? --- idk, we're all lost
+
+        Objects.visionSubsystem.turnOnLeds();
     }
 
+    
     /**
      * Reads the driver controller buttons and stores their current state
      */
@@ -162,6 +162,7 @@ public class DriveAndOperate {
         driverRotateStick = m_DriverController.getRawAxis(4);
         //driverLeftHood = (m_DriverController.getRawAxis(3)+1)/2;
         visionShoot = m_DriverController.getRawButton(6); // right bumper lineup and shoot
+        resetNavx = m_DriverController.getRawButton(8) && m_DriverController.getRawButton(7);
         
     }
     
@@ -172,45 +173,66 @@ public class DriveAndOperate {
         spoolUpButton = m_OperatorController.getRawButton(1); // a button
         ejectBall = m_OperatorController.getRawButton(2); // b button
         lowGoal= m_OperatorController.getRawButton(4); // y button
-        resetNavx = m_OperatorController.getRawButton(8) && m_OperatorController.getRawButton(7); //center buttons menu and hamburger buttons
+         //center buttons menu and hamburger buttons
         manualButton = m_OperatorController.getRawButton(3); //manual index x button
         intakeButton = m_OperatorController.getRawButton(6); //right bumper
+        if (!raiseClimb) {
+            raiseClimb = m_OperatorController.getRawButton(8) && m_OperatorController.getRawButton(7);
+        }
+        climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        resetHood = m_DriverController.getRawButton(5);
+        
+        // if (shootWithVisionButton) {
+        //     Objects.hoodSubsystem.adjustHood(testHood);
+        //     Objects.shootSubsystem.setShooterRPM(driverShootThrottle);
+        // } else {
+        //     Motors.shooterLeader.stopMotor();
+        //     Motors.shooterFollower.stopMotor();
+        // }
+        /**
+         * OTHER CLIMB
+         */
+
 
         //old climb
-        if (m_OperatorController.getPOV() == 0) {
-            climbForwardButton = true;
-            climbBackwardButton = false;
-        }
-        else if (m_OperatorController.getPOV() == 180) {
-            climbBackwardButton = true;
-            climbForwardButton = false;
-        }
-        else {
-            climbForwardButton = false;
-            climbBackwardButton = false;
-        }
+        // if (m_OperatorController.getPOV() == 0) {
+        //     releaseTopHooks = true;
+        //     releaseBottomHooks = false;
+        // }
+        // else if (m_OperatorController.getPOV() == 180) {
+        //     releaseBottomHooks = true;
+        //     releaseTopHooks = false;
+        // }
+        // else {
+        //     releaseTopHooks = false;
+        //     releaseBottomHooks = false;
+        // }
 
 
-        //old climb
-        if (m_OperatorController.getPOV() == 90) {
-            rotateForwardButton = true;
-            rotateBackwardButton = false;
-        }
-        else if (m_OperatorController.getPOV() == 270) {
-            rotateBackwardButton = true;
-            rotateForwardButton = false;
-        }
-        else {
-            rotateForwardButton = false;
-            rotateBackwardButton = false;
-        }
+        // //old climb
+        // if (m_OperatorController.getPOV() == 90) {
+        //     rotateForwardButton = true;
+        //     rotateBackwardButton = false;
+        // }
+        // else if (m_OperatorController.getPOV() == 270) {
+        //     rotateBackwardButton = true;
+        //     rotateForwardButton = false;
+        // }
+        // else {
+        //     rotateForwardButton = false;
+        //     rotateBackwardButton = false;
+        // }
+        climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        
     }
 
     public void testJoystickRead () {
-        driverShootThrottle = (m_DriverController.getRawAxis(3)+1)*1000 + 1000;
-        testHood = (m_OperatorController.getRawAxis(3)+1)*.1;
-        resetHood = m_DriverController.getRawButton(5);
-        shootWithVisionButton = m_DriverController.getRawButton(1);
-        
+        // driverShootThrottle = (m_DriverController.getRawAxis(3)+1)*1000 + 1000;
+        // testHood = (m_OperatorController.getRawAxis(3)+1)*.1;
+        // resetHood = m_DriverController.getRawButton(5);
+        // shootWithVisionButton = m_DriverController.getRawButton(1);
+        //climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        // intakeButton = m_OperatorController.getRawButton(6); //right bumper
+
     }
 }

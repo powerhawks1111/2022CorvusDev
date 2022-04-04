@@ -26,18 +26,14 @@ public class IntakeAuto extends SubsystemBase{
         //called once per scheduler run
     }
     public void extendIntake() {
-        Objects.intakePistonRight.set(DoubleSolenoid.Value.kReverse);
-        Objects.intakePistonLeft.set(DoubleSolenoid.Value.kReverse);
-        Motors.intakeLeader.set(.75);
+        Objects.intakeSubsystem.extendIntake();
     }
 
     /**
      * Activates relay to retract intake piston
      */
     public void retractIntake() {
-        Objects.intakePistonRight.set(DoubleSolenoid.Value.kForward);
-        Objects.intakePistonLeft.set(DoubleSolenoid.Value.kForward);
-        Motors.intakeLeader.stopMotor();
+        Objects.intakeSubsystem.retractIntake();
     }
 
 }

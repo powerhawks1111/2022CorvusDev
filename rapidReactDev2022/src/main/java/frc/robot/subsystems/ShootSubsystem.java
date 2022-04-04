@@ -31,7 +31,7 @@ public class ShootSubsystem extends SubsystemBase{
         kP = 0.0002; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
         //kI = 0.000001; //.00000001 .000000000001
         kD = 0.00019; // 0.0002 //.00002
-        kF = .00022; //0.0002
+        kF = .00018; //0.0002
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -43,8 +43,8 @@ public class ShootSubsystem extends SubsystemBase{
         shooterFollowerPID.setFF(kF);
 
 
-        Motors.shooterLeader.setClosedLoopRampRate(0.2);
-        Motors.shooterFollower.setClosedLoopRampRate(0.2);
+        Motors.shooterLeader.setClosedLoopRampRate(0.7);
+        Motors.shooterFollower.setClosedLoopRampRate(0.7);
 
     }
     public void shoot (Boolean shoot) {
@@ -59,13 +59,13 @@ public class ShootSubsystem extends SubsystemBase{
     public void setShooterRPM(double shooterRPM) {
         currentSetpoint = shooterRPM;
         SmartDashboard.putNumber("Setpoint", shooterRPM);
-        if (Motors.shooterLeader.getEncoder().getVelocity()< (shooterRPM-300)) {
-            Motors.shooterLeader.set(1);
-            Motors.shooterFollower.follow(Motors.shooterLeader, true);
-        } else {
+        // if (Motors.shooterLeader.getEncoder().getVelocity()< (shooterRPM-300)) {
+        //     Motors.shooterLeader.set(.5);
+        //     Motors.shooterFollower.follow(Motors.shooterLeader, true);
+        // } else {
         shooterPID.setReference(shooterRPM, ControlType.kVelocity);
         Motors.shooterFollower.follow(Motors.shooterLeader, true);
-        }
+        //}
         
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
         SmartDashboard.putNumber("ShooterLeaderCurrent", Motors.shooterLeader.getOutputCurrent());
@@ -93,7 +93,7 @@ public class ShootSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("errDelta", errDelta);
         SmartDashboard.putNumber("currentSetpoint", currentSetpoint);
         SmartDashboard.putNumber("currentVelocity", shooterEncoder.getVelocity());
-        return (currentSetpoint>0)&&(errDelta <= 50);//&&m_shoot; //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
+        return (currentSetpoint>0)&&(errDelta <= 50)&&m_shoot&&Objects.visionSubsystem.linedUp(); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
     
     }
 }

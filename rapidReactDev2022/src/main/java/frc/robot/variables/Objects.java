@@ -19,6 +19,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MoveToSubsystem;
+import frc.robot.subsystems.PixyCamSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Compressor;
@@ -34,8 +35,8 @@ public class Objects {
      */
  
      public static AHRS navx = new AHRS();
-    public static DoubleSolenoid intakePistonLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-    public static DoubleSolenoid intakePistonRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+    public static DoubleSolenoid intakePistonLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 2);
+    public static DoubleSolenoid intakePistonRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 3);
     public static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public static DigitalInput limitSwitch = new DigitalInput(2);
     public static DigitalInput indexFirstSensor = new DigitalInput(0);
@@ -58,7 +59,21 @@ public class Objects {
     public static HoodSubsystem hoodSubsystem = new HoodSubsystem();
     public static VisionSubsystem visionSubsystem = new VisionSubsystem();
     public static IntakeAuto intakeAuto = new IntakeAuto();
+    public static PixyCamSubsystem pixyCamSubsystem = new PixyCamSubsystem();
 
     public static Scheduler scheduler = new Scheduler();
+
+
+    /**
+     * ---------------------------------------------------------------------------------------
+     * Climb
+     * ---------------------q------------------------------------------------------------------
+     */
+    public static DoubleSolenoid climbLeftRaise = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+    public static DoubleSolenoid climbRightRaise= new DoubleSolenoid(PneumaticsModuleType.REVPH, 10, 11);
+    public static DoubleSolenoid bottomRightHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+    public static DoubleSolenoid topRightHook = new DoubleSolenoid (PneumaticsModuleType.REVPH, 6, 7);
+    public static DoubleSolenoid topLeftHook = new DoubleSolenoid (PneumaticsModuleType.REVPH, 12, 13);
+    public static DoubleSolenoid bottomLeftHook = new DoubleSolenoid (PneumaticsModuleType.REVPH, 15, 14); //intentionally reversed
 
 }

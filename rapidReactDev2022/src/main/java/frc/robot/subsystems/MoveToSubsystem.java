@@ -6,8 +6,9 @@ import frc.robot.variables.Objects;
 
 public class MoveToSubsystem extends SubsystemBase{
     double[] componentSpeeds = {0,0};
-    boolean inRange;
-
+    public boolean inRange = false;
+    double idealPixyY = 190; //was 174
+    double idealPixyX = 167;
     public MoveToSubsystem() {
 
     }
@@ -31,7 +32,8 @@ public class MoveToSubsystem extends SubsystemBase{
      * @param speed speed to drive, 0-1
      * @param decelParam parameter to set the slowdown curve for stopping at the end of the path (number of inches from endpoint to start slowing down)
      */
-    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed, double decelParam) {
+    public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed, double decelParam, boolean pixy) {
+        boolean fieldRelative = true;
         double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
         double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
         
@@ -39,29 +41,88 @@ public class MoveToSubsystem extends SubsystemBase{
 
         SmartDashboard.putNumber("angleValue",  rotation);
 
-        double xPositionError = -xPositionDesired - currentPoseX;
-        double yPositionError = yPositionDesired - currentPoseY;
-
+        double xPositionError = -xPositionDesired - currentPoseX; //idk whu xpositiondesired has to be negative
+        double yPositionError = -yPositionDesired - currentPoseY; // may fuck things up
+        
+        boolean pixyValid = Objects.pixyCamSubsystem.getPixyX(0) != -1;
+        if(pixy) {
+            if (pixyValid) {
+                rotation = Math.pow(- speed* (Objects.pixyCamSubsystem.getPixyX(0)-idealPixyX)/40, 5);
+                yPositionError = speed * (Objects.pixyCamSubsystem.getPixyY(0)-idealPixyY);
+                xPositionError = 0;
+                fieldRelative = false;
+            } 
+        } 
+        
         SmartDashboard.putNumber("xPositionError", xPositionError);
         SmartDashboard.putNumber("yPositionError", yPositionError);
 
         double xTranslatePower = Math.min((xPositionError / decelParam), 1) * speed;
         double yTranslatePower = Math.min((yPositionError / decelParam), 1) * speed;
 
+        if (!pixyValid && !pixy) {
+            if ((Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) && rotation <.1  && !inRange)  {
+                inRange = true;
 
-        if (Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) {
-            inRange = true;
-
-        }
-        else {
-            inRange = false;
-            Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, true);
-        }
-        
-       
+            }
+            else { 
+                inRange = false;
+                Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, fieldRelative);
+             } 
+            } else {
+                if  (Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1 && rotation <1  && !inRange) {
+                    inRange = true;
+                }
+                else {
+                    inRange = false; 
+                    Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, fieldRelative);
+                }
+             }
+       SmartDashboard.putBoolean("inRange", inRange);
 
     }
 
+    
+    // public void translateToPosition(double xPositionDesired, double yPositionDesired, double rotationAngleDesired, double speed, double decelParam, boolean pixy) {
+    //     boolean fieldRelative = true;
+    //     double currentPoseX = Objects.drivetrain.getCurrentPose2d().getX();
+    //     double currentPoseY = Objects.drivetrain.getCurrentPose2d().getY();
+        
+    //     double rotation = -turnToAngle(rotationAngleDesired, speed);
+
+    //     SmartDashboard.putNumber("angleValue",  rotation);
+
+    //     double xPositionError = -xPositionDesired - currentPoseX; //idk whu xpositiondesired has to be negative
+    //     double yPositionError = -yPositionDesired - currentPoseY; // may fuck things up
+        
+    //     if(pixy) {
+    //         if (Objects.pixyCamSubsystem.getPixyX(0) != -1) {
+    //             rotation = Math.pow(- speed* (Objects.pixyCamSubsystem.getPixyX(0)-idealPixyX)/40, 5);
+    //             yPositionError = speed * (Objects.pixyCamSubsystem.getPixyY(0)-idealPixyY);
+    //             xPositionError = 0;
+    //             fieldRelative = false;
+    //         } 
+    //     } 
+        
+    //     SmartDashboard.putNumber("xPositionError", xPositionError);
+    //     SmartDashboard.putNumber("yPositionError", yPositionError);
+
+    //     double xTranslatePower = Math.min((xPositionError / decelParam), 1) * speed;
+    //     double yTranslatePower = Math.min((yPositionError / decelParam), 1) * speed;
+
+        
+    //         if ((Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) && rotation <.1  && !inRange)  {
+    //             inRange = true;
+
+    //         }
+    //         else { 
+    //             inRange = false;
+    //             Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, fieldRelative);
+    //          } 
+             
+    //    SmartDashboard.putBoolean("inRange", inRange);
+
+    // }
     /**
      * Whether the robot has arrived at the destination
      * @return Boolean of whether or not the robot has completed its translation

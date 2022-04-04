@@ -23,7 +23,7 @@ public class IndexSubsystem {
     private double kP = 0; //0.05
     private double kI = 0;
     private double kD = 0;
-    private double kFF = 0.0000005;
+    private double kFF = 0.00000005;
     private boolean m_eject = false;
     private boolean m_manual = false;
     double currentPosition;

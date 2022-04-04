@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Objects.smartDashboardUpdater.setupSmartDashboard();
         Objects.navx.setAngleAdjustment(90);
+        
     }
 
     @Override
@@ -49,28 +50,28 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         Objects.drivetrain.updateOdometry();
         switch (autoSelected) {
-        case "Red Path":
-            autonomous.redPath();
-            break;
-        case "Orange Path":
-            autonomous.orangePath();
-            break;
-        case "Yellow Path":
-            autonomous.yellowPath();
-            break;
-        case "Green Path":
-            autonomous.greenPath();
-            break;
-        case "Blue Path":
-            autonomous.bluePath();
-            break;
-        case "Purple Path":
-            autonomous.purplePath();
-            break;
-        case "Default Path":
-        default:
-            autonomous.defaultPath();
-            break;
+            case "Red Path":
+                autonomous.redPath();
+                break;
+            case "Orange Path":
+                autonomous.orangePath();
+                break;
+            case "Yellow Path":
+                autonomous.yellowPath();
+                break;
+            case "Green Path":
+                autonomous.greenPath();
+                break;
+            case "Blue Path":
+                autonomous.bluePath();
+                break;
+            case "Purple Path":
+                autonomous.purplePath();
+                break;
+            case "Default Path":
+            default:
+                autonomous.defaultPath();
+                break;
         }
         
         Objects.visionSubsystem.updateVision();
@@ -84,11 +85,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        //driveAndOperate.readDriverController();
-        //driveAndOperate.readOperatorController();
+        driveAndOperate.readDriverController();
+        driveAndOperate.readOperatorController();
         driveAndOperate.driveAndOperate();       
         Objects.indexSubsystem.backgroundIndex();
-        driveAndOperate.testJoystickRead();
+        Objects.visionSubsystem.updateVision();
+        //driveAndOperate.testJoystickRead();
     }
 
 

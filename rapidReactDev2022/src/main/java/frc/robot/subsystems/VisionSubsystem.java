@@ -6,6 +6,7 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.variables.Objects;
 public class VisionSubsystem extends SubsystemBase{
     private double area;
     private double yAngle;
@@ -29,6 +30,9 @@ public class VisionSubsystem extends SubsystemBase{
         validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean(false);
         SmartDashboard.putNumber("xAngle", xAngle);
         
+        SmartDashboard.putNumber("xPixy", Objects.pixyCamSubsystem.getPixyX(0));
+
+        SmartDashboard.putNumber("YPixy", Objects.pixyCamSubsystem.getPixyY(0));
 
         SmartDashboard.putNumber("yAngle", yAngle);
         if (validTargets) {
@@ -50,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase{
      * Calculates the shooter rpm based on the limelight distance cubic regression model
      * @return Shooter RPM
      */
-    public double rpmFromVision () {
+    public double rpmFromVisionCube () {
         return (-0.12906 * Math.pow(yAngle, 3)) + (2.167459 * Math.pow(yAngle, 2)) - (3.7657413 * yAngle) + (1345.6);
     }
 
@@ -58,8 +62,9 @@ public class VisionSubsystem extends SubsystemBase{
      * Calculates the shooter rpm based on the limelight distance quadratic regression model
      * @return Shooter RPM
      */
-    public double rpmFromVisionQuad () {
-        return (1.66 * Math.pow(yAngle, 2)) - (14.65 * yAngle) + (1371);
+    public double rpmFromVision () {
+        return 25*(((1.7083*Math.pow(yAngle, 2)-16.1634*yAngle+1288.11))/9); //c = 1358.11;
+
     }
 
     /**
@@ -77,7 +82,7 @@ public class VisionSubsystem extends SubsystemBase{
      */
     public double turnToTargetPower() {
         double turnKp = 0.85;
-        double rotatePower = xAngle / (27 * turnKp);
+        double rotatePower = (xAngle-2) / (27 * turnKp); //we shoot to the right
         return rotatePower;
     }
 
@@ -122,8 +127,8 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Hood motor value for hood PID reference (number of motor rotations)
      */
     public double hoodAngleFromVision () {
-        double motorPosition = (-0.001493 * yAngle) + (0.01114);
-        if (motorPosition <=0) {
+       double motorPosition = (((-.004493 * yAngle) + .027258));
+        if (motorPosition <0) {
              motorPosition = 0;
          }
         return motorPosition;
@@ -133,10 +138,10 @@ public class VisionSubsystem extends SubsystemBase{
      * Turns off limelight leds
      */
     public void turnOffLeds() {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
     }
 
-    /**
+    /*
      * Turns on limelight leds
      */
     public void turnOnLeds() {

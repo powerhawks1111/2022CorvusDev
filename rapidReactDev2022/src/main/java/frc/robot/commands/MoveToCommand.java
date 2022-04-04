@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.MoveToSubsystem;
+import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
 
 public class MoveToCommand extends CommandBase {
@@ -9,9 +10,9 @@ public class MoveToCommand extends CommandBase {
     private final MoveToSubsystem m_moveToSubsystem;
 
     private double desiredX, desiredY, desiredHeading, translateSpeed, rotationSpeed, m_decelParam;
-    private boolean m_intake; 
+    private boolean m_intake, m_pixy; 
 
-    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam, boolean intake) {
+    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam, boolean intake, boolean pixy) {
         m_moveToSubsystem = moveToSubsystem;
         desiredX = desiredPositionX;
         desiredY = desiredPositionY;
@@ -20,12 +21,18 @@ public class MoveToCommand extends CommandBase {
         rotationSpeed = rotateSpeed;
         m_decelParam = decelParam;
         m_intake = intake;
+        m_pixy = pixy;
         addRequirements(moveToSubsystem);
     }
-
+    @Override
+    public  void initialize () {
+        //Motors.shooterLeader.stopMotor();
+        //Motors.shooterFollower.stopMotor();
+        m_moveToSubsystem.inRange = false;
+    }
     @Override
     public void execute() {
-        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam);
+        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam, m_pixy);
         if (m_intake) {
             Objects.intakeSubsystem.extendIntake();
         } else {
