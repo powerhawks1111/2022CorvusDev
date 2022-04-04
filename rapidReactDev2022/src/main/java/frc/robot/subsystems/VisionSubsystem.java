@@ -16,6 +16,7 @@ public class VisionSubsystem extends SubsystemBase{
 
     double cameraHeight = 37; //inches
     double targetHeight = 114;
+    double correctedTargetHeight = targetHeight - cameraHeight;
     double cameraAngle = 35; //degrees
     double cameraAngleRadians = cameraAngle * (Math.PI / 180);
     boolean shoot = false;
@@ -72,9 +73,35 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Distance from the goal, in inches
      */
     public double calculateDistanceInches () {
-        double cameraToGoalInches = (targetHeight - cameraHeight) / Math.tan(cameraAngleRadians);
-        return cameraToGoalInches;
+        double currentTargetAngle = 35 + yAngle;
+        double targetAngleRadians = currentTargetAngle * (Math.PI / 180);
+        double targetDistance = correctedTargetHeight / (Math.tan(targetAngleRadians));
+        return targetDistance;
     }
+
+    /**
+     * Calculates the amount to rotate away from the target based on how fast the robot is moving
+     * @return
+     */
+    public double turnToTargetPower_whileMoving() {
+        double ballFlightTime = 0; //ball flight vs yValue regression
+        double chassisXSpeed = Objects.drivetrain.getChassisSpeeds().vyMetersPerSecond;//inch per second sideways
+        double limelightOffset = Math.atan2(chassisXSpeed * ballFlightTime, calculateDistanceInches());
+
+        double turnKp = 0.85;
+        double constantLimelightCorrection = 2;
+        double rotatePower = (xAngle - constantLimelightCorrection - limelightOffset) / (27 * turnKp); //we shoot to the right
+        return rotatePower;
+    }
+
+    public double rpmFromVision_whileMoving() {
+        double ballFlightTime = 0; //ball flight vs yValue regression
+        double stationaryShotVelocityPrediction = calculateDistanceInches() / ballFlightTime;
+        double adjustedShotVelocity = stationaryShotVelocityPrediction - Objects.drivetrain.getChassisSpeeds().vxMetersPerSecond;
+        double adjustedRPM = 0; //regression of velocity vs rpm
+        return adjustedRPM;
+    }
+
 
     /**
      * Calculates how much rotate power to apply to the drivetrain to line up with the goal
@@ -131,6 +158,15 @@ public class VisionSubsystem extends SubsystemBase{
         if (motorPosition <0) {
              motorPosition = 0;
          }
+        return motorPosition;
+    }
+
+    public double hoodAngleFromVision_whileMoving() {
+        double shooterRPM = rpmFromVision_whileMoving();
+        double motorPosition = 0; //regression of shooter rpm vs hood angle
+        if (motorPosition <0) {
+            motorPosition = 0;
+        }
         return motorPosition;
     }
 

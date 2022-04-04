@@ -72,4 +72,12 @@ public class Drivetrain extends SubsystemBase {
     public Pose2d getCurrentPose2d() {
         return m_odometry.getPoseMeters();
     }
+
+    /**
+     * Converts raw module states into chassis speeds
+     * @return chassis speeds object
+     */
+    public ChassisSpeeds getChassisSpeeds() {
+        return m_kinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+    }
 }
