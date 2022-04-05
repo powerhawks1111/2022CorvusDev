@@ -73,9 +73,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Distance from the goal, in inches
      */
     public double calculateDistanceInches () {
-        double currentTargetAngle = 35 + yAngle;
-        double targetAngleRadians = currentTargetAngle * (Math.PI / 180);
-        double targetDistance = correctedTargetHeight / (Math.tan(targetAngleRadians));
+        double targetDistance = (-3.75888 * yAngle) + 90.3349;
         return targetDistance;
     }
 
@@ -84,7 +82,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return
      */
     public double turnToTargetPower_whileMoving() {
-        double ballFlightTime = 0; //ball flight vs yValue regression
+        double ballFlightTime = -(0.01795 * yAngle) + 1.104; //ball flight vs yValue regression
         double chassisXSpeed = Objects.drivetrain.getChassisSpeeds().vyMetersPerSecond;//inch per second sideways
         double limelightOffset = Math.atan2(chassisXSpeed * ballFlightTime, calculateDistanceInches());
 
@@ -95,10 +93,10 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public double rpmFromVision_whileMoving() {
-        double ballFlightTime = 0; //ball flight vs yValue regression
+        double ballFlightTime = -(0.01795 * yAngle) + 1.104; //ball flight vs yValue regression
         double stationaryShotVelocityPrediction = calculateDistanceInches() / ballFlightTime;
         double adjustedShotVelocity = stationaryShotVelocityPrediction - Objects.drivetrain.getChassisSpeeds().vxMetersPerSecond;
-        double adjustedRPM = 0; //regression of velocity vs rpm
+        double adjustedRPM = (8.911 * adjustedShotVelocity) + 3064.36; //regression of velocity vs rpm
         return adjustedRPM;
     }
 
@@ -163,7 +161,7 @@ public class VisionSubsystem extends SubsystemBase{
 
     public double hoodAngleFromVision_whileMoving() {
         double shooterRPM = rpmFromVision_whileMoving();
-        double motorPosition = 0; //regression of shooter rpm vs hood angle
+        double motorPosition = (0.00014851 * shooterRPM) - 0.53194; //regression of shooter rpm vs hood angle
         if (motorPosition <0) {
             motorPosition = 0;
         }
