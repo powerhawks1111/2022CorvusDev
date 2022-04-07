@@ -60,6 +60,7 @@ public class Objects {
     public static VisionSubsystem visionSubsystem = new VisionSubsystem();
     public static IntakeAuto intakeAuto = new IntakeAuto();
     public static PixyCamSubsystem pixyCamSubsystem = new PixyCamSubsystem();
+    
 
     public static Scheduler scheduler = new Scheduler();
 

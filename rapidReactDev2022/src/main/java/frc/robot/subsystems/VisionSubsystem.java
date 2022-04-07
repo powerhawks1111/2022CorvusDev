@@ -143,7 +143,8 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Boolean of whether the target is close enough to the center to shoot
      */
     public boolean linedUp() {
-        return (Math.abs(xAngle)<7);
+        return (Math.abs(xAngle-2)<7); //TODO CHECK IF FIXED
+        
     }
 
 

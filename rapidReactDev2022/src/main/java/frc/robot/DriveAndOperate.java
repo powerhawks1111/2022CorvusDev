@@ -36,11 +36,9 @@ public class DriveAndOperate {
     private double driverRotateStick = 0;
     private boolean intakeButton = false;
     private boolean shootWithVisionButton = false;
-    private boolean resetHood = false; 
+    private boolean pixyLineUp = false; 
     private boolean spoolUpButton = false;
-    private boolean releaseTopHooks = false;
-    private boolean releaseBottomHooks = false;
-    private boolean loveMuffin = false;
+
     //private double driverLeftHood = 0;
     private double testHood = 0;
     private boolean visionShoot = false;
@@ -52,6 +50,7 @@ public class DriveAndOperate {
     private boolean resetNavx = false;
     private boolean manualButton = false;
     private boolean raiseClimb = false;
+    
 
     /**
      * Runs subsystems on the robot based on pre-evaluated driver and operator inputs
@@ -65,28 +64,19 @@ public class DriveAndOperate {
         Objects.visionSubsystem.updateVision();
         Objects.shootSubsystem.shoot(visionShoot);
 
-        Objects.climbLeftRaise.set(DoubleSolenoid.Value.kForward);
-        Objects.climbRightRaise.set(DoubleSolenoid.Value.kForward);
-
         Motors.climbLeader.set(climbRotateSpeed);
 
+        Objects.indexSubsystem.updateEject(ejectBall); //update flags for background index
+        
+        Objects.indexSubsystem.updateManual(manualButton); //update flags for background index
 
-        // if (shootWithVisionButton) {
-        //     Objects.shootSubsystem.setShooterRPM(driverShootThrottle);
-        //     Objects.hoodSubsystem.adjustHood(testHood);
-        // }
-        // else {
-        //     Motors.shooterLeader.stopMotor();
-        //     Motors.shooterFollower.stopMotor();
-        //     Motors.hoodMotor.stopMotor();
-        // }
+        Objects.visionSubsystem.turnOnLeds();
         
 
         if (raiseClimb) {
             Motors.climbLeader.set(climbRotateSpeed);
         }
 
-       
         /**
          * INTAKE
          */
@@ -102,11 +92,7 @@ public class DriveAndOperate {
             Objects.intakeSubsystem.runIntakeWheels(0);
         }
 
-        Objects.indexSubsystem.updateEject(ejectBall); //update flags for background index
-        
-        Objects.indexSubsystem.updateManual(manualButton); //update flags for background index
 
-        Objects.visionSubsystem.turnOnLeds();
         /**
          * SHOOT
          */
@@ -120,16 +106,16 @@ public class DriveAndOperate {
             Objects.shootSubsystem.spoolUp();
         }
         else if (lowGoal) {
-            Objects.shootSubsystem.setShooterRPM(950);
+            Objects.shootSubsystem.setShooterRPM(950); //TODO TEST LOWGOAL
             SmartDashboard.putBoolean("isShootingButton", false);
-            Objects.hoodSubsystem.adjustHood(.15);
+            Objects.hoodSubsystem.adjustHood(.05);
         } else {
-            Objects.visionSubsystem.turnOffLeds();
             Motors.shooterLeader.stopMotor();
+            Motors.shooterFollower.stopMotor();
             SmartDashboard.putBoolean("isShootingButton", false);
         }
 
-        if(resetHood) {
+        if(pixyLineUp) {
             Objects.hoodSubsystem.setHoodZero();
         
         }
@@ -146,8 +132,6 @@ public class DriveAndOperate {
          */
         Objects.driveSubsystem.driveSwerve(xSpeed, ySpeed, rot +.0001 , fieldRelative); //final movement; sends drive values to swerve
         Objects.drivetrain.updateOdometry(); //where are we? --- idk, we're all lost
-
-        Objects.visionSubsystem.turnOnLeds();
     }
 
     
@@ -160,6 +144,7 @@ public class DriveAndOperate {
         driverRotateStick = m_DriverController.getRawAxis(4);
         //driverLeftHood = (m_DriverController.getRawAxis(3)+1)/2;
         visionShoot = m_DriverController.getRawButton(6); // right bumper lineup and shoot
+        pixyLineUp = m_DriverController.getRawButton(5);
         resetNavx = m_DriverController.getRawButton(8) && m_DriverController.getRawButton(7);
         
     }
@@ -178,7 +163,7 @@ public class DriveAndOperate {
             raiseClimb = m_OperatorController.getRawButton(8) && m_OperatorController.getRawButton(7);
         }
         climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
-        resetHood = m_DriverController.getRawButton(5);
+        
         
         // if (shootWithVisionButton) {
         //     Objects.hoodSubsystem.adjustHood(testHood);
