@@ -17,9 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
 public class HoodSubsystem extends SubsystemBase{
     private SparkMaxPIDController hoodPID = Motors.hoodMotor.getPIDController();
-    private double kP = 0.01;
+    private double kP = 0.02; //was .01
     private double kI = 0;
     private double kD = 0;
+    
 
     private boolean isZeroed = false;
 
@@ -42,8 +43,7 @@ public class HoodSubsystem extends SubsystemBase{
             Motors.hoodMotor.stopMotor();
             homePosition = Motors.hoodMotor.getEncoder().getPosition();
             isZeroed = true;
-            SmartDashboard.putNumber("homeEncoderValue", homePosition);
-
+            
 
             //reset encoder
         } else { //move motor down until we hit
@@ -61,7 +61,6 @@ public class HoodSubsystem extends SubsystemBase{
         //gather vision output for distance to RPM/hood angle
         SmartDashboard.putNumber("wantedHood", wantedPosition);
         double motorPosition = wantedPosition * 122 + homePosition;
-        SmartDashboard.putNumber("HoodValue", motorPosition);
         if (isZeroed&& motorPosition>homePosition) {
             hoodPID.setReference(motorPosition, ControlType.kPosition);
         } else {

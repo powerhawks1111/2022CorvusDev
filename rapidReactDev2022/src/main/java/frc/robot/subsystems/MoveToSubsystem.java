@@ -7,7 +7,7 @@ import frc.robot.variables.Objects;
 public class MoveToSubsystem extends SubsystemBase{
     double[] componentSpeeds = {0,0};
     public boolean inRange = false;
-    double idealPixyY = 190; //was 174
+    double idealPixyY = 155; //was 174
     double idealPixyX = 167;
     public MoveToSubsystem() {
 
@@ -47,7 +47,7 @@ public class MoveToSubsystem extends SubsystemBase{
         boolean pixyValid = Objects.pixyCamSubsystem.getPixyX(0) != -1;
         if(pixy) {
             if (pixyValid) {
-                rotation = Math.pow(- speed* (Objects.pixyCamSubsystem.getPixyX(0)-idealPixyX)/40, 5);
+                rotation = Math.pow(- speed* (Objects.pixyCamSubsystem.getPixyX(0)-idealPixyX)/55, 5);
                 yPositionError = speed * (Objects.pixyCamSubsystem.getPixyY(0)-idealPixyY);
                 xPositionError = 0;
                 fieldRelative = false;
@@ -60,8 +60,8 @@ public class MoveToSubsystem extends SubsystemBase{
         double xTranslatePower = Math.min((xPositionError / decelParam), 1) * speed;
         double yTranslatePower = Math.min((yPositionError / decelParam), 1) * speed;
 
-        if (!pixyValid && !pixy) {
-            if ((Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) && rotation <.1  && !inRange)  {
+        if (!pixyValid || !pixy) {
+            if ((Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1) && rotation <.1)  {
                 inRange = true;
 
             }
@@ -70,7 +70,7 @@ public class MoveToSubsystem extends SubsystemBase{
                 Objects.drivetrain.drive(xTranslatePower, yTranslatePower, rotation, fieldRelative);
              } 
             } else {
-                if  (Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1 && rotation <1  && !inRange) {
+                if  (Math.abs(xPositionError) < 1 && Math.abs(yPositionError) < 1 && rotation <1) {
                     inRange = true;
                 }
                 else {

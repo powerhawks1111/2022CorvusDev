@@ -36,11 +36,7 @@ public class VisionSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("YPixy", Objects.pixyCamSubsystem.getPixyY(0));
 
         SmartDashboard.putNumber("yAngle", yAngle);
-        if (validTargets) {
-            SmartDashboard.putBoolean("Targets", true);
-        } else {
-            SmartDashboard.putBoolean("Targets", false);
-        }
+        
     }
 
     /**
@@ -64,7 +60,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Shooter RPM
      */
     public double rpmFromVision () {
-        return (0.680456 * Math.pow(yAngle, 2))-(31.10814 * yAngle) + (3845.7302); //c = 1358.11;
+        return (0.680456 * Math.pow(yAngle, 2))-(31.10814 * yAngle) + (3985.7302); //c = 3845.73;
 
     }
 

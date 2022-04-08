@@ -16,14 +16,16 @@ public class ShootCommand extends CommandBase{
     private VisionSubsystem m_visionSubsystem;
     private boolean m_custom;
     private double m_customRPM;
+    private boolean m_iDontGiveAFuck;
 
-    public ShootCommand(ShootSubsystem shootSubsystem, HoodSubsystem hoodSubsystem, Drivetrain drivetrain, VisionSubsystem visionSubsystem, boolean custom, double customRPM) {
+    public ShootCommand(ShootSubsystem shootSubsystem, HoodSubsystem hoodSubsystem, Drivetrain drivetrain, VisionSubsystem visionSubsystem, boolean custom, double customRPM, boolean iDontGiveAFuck) {
         m_shootSubsystem = shootSubsystem;
         m_hoodSubsystem = hoodSubsystem;
         m_drivetrain = drivetrain;
         m_visionSubsystem = visionSubsystem;
         m_custom = custom;
         m_customRPM = customRPM;
+        m_iDontGiveAFuck = iDontGiveAFuck;
         addRequirements(shootSubsystem);
         addRequirements(hoodSubsystem);
         addRequirements(drivetrain);
@@ -37,7 +39,10 @@ public class ShootCommand extends CommandBase{
             } else {
             m_shootSubsystem.setShooterRPM(m_visionSubsystem.rpmFromVision());
             }
-            double rot = -m_visionSubsystem.turnToTargetPower()*.45;
+            if (m_iDontGiveAFuck) {
+                Objects.indexSubsystem.updateManual(true);
+            }
+            double rot = -m_visionSubsystem.turnToTargetPower()*(.67);
             m_hoodSubsystem.adjustHood(m_visionSubsystem.hoodAngleFromVision());
             m_shootSubsystem.shoot(true);
             m_drivetrain.drive(0, 0, rot, true);

@@ -50,7 +50,10 @@ public class DriveAndOperate {
     private boolean resetNavx = false;
     private boolean manualButton = false;
     private boolean raiseClimb = false;
-    
+    private double idealPixyY = 155; //was 174
+    private double idealPixyX = 167;
+    private double xPositionError = 0;
+    private double yPositionError = 0;
 
     /**
      * Runs subsystems on the robot based on pre-evaluated driver and operator inputs
@@ -101,23 +104,29 @@ public class DriveAndOperate {
             Objects.shootSubsystem.setShooterRPM(Objects.visionSubsystem.rpmFromVision());
             rot = -Objects.visionSubsystem.turnToTargetPower()*(.67);
             Objects.hoodSubsystem.adjustHood(Objects.visionSubsystem.hoodAngleFromVision());
-            SmartDashboard.putBoolean("isShootingButton", true);
+            
         } else if (spoolUpButton) {
             Objects.shootSubsystem.spoolUp();
         }
         else if (lowGoal) {
-            Objects.shootSubsystem.setShooterRPM(950); //TODO TEST LOWGOAL
-            SmartDashboard.putBoolean("isShootingButton", false);
-            Objects.hoodSubsystem.adjustHood(.05);
+            Objects.shootSubsystem.setShooterRPM(2500); //TODO TEST LOWGOAL
+            
+            Objects.hoodSubsystem.adjustHood(.06);
+            Objects.shootSubsystem.shoot(true);
         } else {
             Motors.shooterLeader.stopMotor();
             Motors.shooterFollower.stopMotor();
-            SmartDashboard.putBoolean("isShootingButton", false);
+            
         }
 
-        if(pixyLineUp) {
-            Objects.hoodSubsystem.setHoodZero();
-        
+        if(pixyLineUp && (Objects.pixyCamSubsystem.getPixyX(0) != -1)) {
+            rot = Math.pow(- .3* (Objects.pixyCamSubsystem.getPixyX(0)-idealPixyX)/40, 5);
+            yPositionError = .3 * (Objects.pixyCamSubsystem.getPixyY(0)-idealPixyY);
+            xPositionError = 0;
+
+            xSpeed = Math.min((xPositionError / 20), 1) * .3;
+            ySpeed = Math.min((yPositionError / 20), 1) * .3;
+            fieldRelative = false;
         }
         
         /**
@@ -127,6 +136,7 @@ public class DriveAndOperate {
             Objects.navx.reset();
         }
 
+        
         /**
          * DRIVE THE ROBOT
          */
@@ -162,7 +172,7 @@ public class DriveAndOperate {
         if (!raiseClimb) {
             raiseClimb = m_OperatorController.getRawButton(8) && m_OperatorController.getRawButton(7);
         }
-        climbRotateSpeed = m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2);
+        climbRotateSpeed = 2*(m_OperatorController.getRawAxis(3) - m_OperatorController.getRawAxis(2));
         
         
         // if (shootWithVisionButton) {

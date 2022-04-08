@@ -69,7 +69,7 @@ public class IndexSubsystem {
         } else if (Objects.indexFirstSensor.get()&& !Objects.indexShooterSensor.get() && !awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
-            SmartDashboard.putString("index", "running");
+            
             awaitingBall = true;
         } else if (Objects.indexShooterSensor.get() && awaitingBall) {
             awaitingBall = false;
@@ -80,7 +80,7 @@ public class IndexSubsystem {
         } else {
             awaitingBall = false;
             indexPID.setReference(Motors.indexLeader.getEncoder().getPosition(), ControlType.kPosition);
-            SmartDashboard.putString("index", "not running");
+            
             //indexPID.setReference(currentPosition, ControlType.kPosition);
         }
     }

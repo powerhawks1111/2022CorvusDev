@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Objects.smartDashboardUpdater.setupSmartDashboard();
-        Objects.navx.setAngleAdjustment(90);
+        
         
     }
 

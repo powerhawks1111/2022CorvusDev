@@ -28,10 +28,10 @@ public class ShootSubsystem extends SubsystemBase{
      * Constructor to set pid gains
      */
     public ShootSubsystem() {
-        kP = 0.0002; //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
+        kP = 0.0003; // .000262//0.00024; //.00022 //0.0420 ultimate gain //.1395 //.01 //.003 //.0012
         //kI = 0.000001; //.00000001 .000000000001
-        kD = 0.00019; // 0.0002 //.00002
-        kF = .0001730; //0.0002
+        kD = 0.08;//.00041// 0.0003; //.0005// 0.0002 //.00002
+        kF = .000175; //0.0002
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -43,8 +43,8 @@ public class ShootSubsystem extends SubsystemBase{
         shooterFollowerPID.setFF(kF);
 
 
-        Motors.shooterLeader.setClosedLoopRampRate(0.7);
-        Motors.shooterFollower.setClosedLoopRampRate(0.7);
+        Motors.shooterLeader.setClosedLoopRampRate(0.2);
+        Motors.shooterFollower.setClosedLoopRampRate(0.2);
 
     }
     public void shoot (Boolean shoot) {
@@ -68,9 +68,9 @@ public class ShootSubsystem extends SubsystemBase{
         //}
         
         SmartDashboard.putNumber("MotorRPM", Motors.shooterLeader.getEncoder().getVelocity());
-        SmartDashboard.putNumber("ShooterLeaderCurrent", Motors.shooterLeader.getOutputCurrent());
+        //SmartDashboard.putNumber("ShooterLeaderCurrent", Motors.shooterLeader.getOutputCurrent());
         SmartDashboard.putNumber("MotorFollowerRPM", Motors.shooterFollower.getEncoder().getVelocity());
-        SmartDashboard.putNumber("ShooterFollowerCurrent", Motors.shooterFollower.getOutputCurrent());
+        //SmartDashboard.putNumber("ShooterFollowerCurrent", Motors.shooterFollower.getOutputCurrent());
 
     }
 
@@ -91,9 +91,7 @@ public class ShootSubsystem extends SubsystemBase{
     public boolean shouldFeedToShooter() {
         double errDelta = Math.abs(shooterEncoder.getVelocity() - currentSetpoint);
         SmartDashboard.putNumber("errDelta", errDelta);
-        SmartDashboard.putNumber("currentSetpoint", currentSetpoint);
-        SmartDashboard.putNumber("currentVelocity", shooterEncoder.getVelocity());
-        return (currentSetpoint>0)&&(errDelta <= 50)&&m_shoot&&Objects.visionSubsystem.linedUp(); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
+        return (currentSetpoint>0)&&(errDelta <= 40)&&m_shoot&&Objects.visionSubsystem.linedUp(); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
         // return (currentSetpoint>0)&&(errDelta <= 50); //((shooterEncoder.getVelocity() >= currentSetpoint-20) && shooterEncoder.getVelocity() <= currentSetpoint +50)
     
     }
