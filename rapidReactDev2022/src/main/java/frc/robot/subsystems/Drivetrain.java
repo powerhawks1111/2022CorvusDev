@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.variables.Objects;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -48,14 +49,23 @@ public class Drivetrain extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the field.
      */
     @SuppressWarnings("ParameterName")
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean defenseHoldingMode) {
         Rotation2d robotRotation = Objects.navx.getRotation2d();
         var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-        m_frontLeft.setDesiredState(swerveModuleStates[0]);
-        m_frontRight.setDesiredState(swerveModuleStates[1]);
-        m_backLeft.setDesiredState(swerveModuleStates[2]);
-        m_backRight.setDesiredState(swerveModuleStates[3]);
+        if (!defenseHoldingMode) {
+            m_frontLeft.setDesiredState(swerveModuleStates[0]);
+            m_frontRight.setDesiredState(swerveModuleStates[1]);
+            m_backLeft.setDesiredState(swerveModuleStates[2]);
+            m_backRight.setDesiredState(swerveModuleStates[3]);
+        }
+        else {
+            m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+            m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+            m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+            m_backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3* (Math.PI / 4))));
+        }
+
     }
 
     /**

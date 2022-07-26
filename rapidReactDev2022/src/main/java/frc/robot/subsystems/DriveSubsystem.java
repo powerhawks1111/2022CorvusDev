@@ -14,8 +14,8 @@ public class DriveSubsystem {
      * @param rot -1 to +1 speed to rotate
      * @param fieldRelative true = field relative
      */
-    public void driveSwerve(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        Objects.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative);
+    public void driveSwerve(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean defenseHoldingMode) {
+        Objects.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative, defenseHoldingMode);
     }
 
     public double turnToTarget() {
@@ -40,7 +40,7 @@ public class DriveSubsystem {
         double yMovement = desiredPositionY - yDisplace;
         double[] componentSpeeds = {0,0};
         if (Math.abs(xMovement) >= 10 ) {
-            if (xMovement<0) {
+            if (xMovement<0) { 
             xMovement = -speedScale;
             } else {
             xMovement = speedScale;

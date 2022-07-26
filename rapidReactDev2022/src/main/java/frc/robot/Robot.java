@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.variables.Motors;
 import frc.robot.variables.Objects;
@@ -27,7 +28,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Objects.smartDashboardUpdater.setupSmartDashboard();
-        
+        CameraServer.startAutomaticCapture();
         
     }
 

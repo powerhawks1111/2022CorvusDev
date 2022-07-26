@@ -45,13 +45,14 @@ public class ShootCommand extends CommandBase{
             double rot = -m_visionSubsystem.turnToTargetPower()*(.67);
             m_hoodSubsystem.adjustHood(m_visionSubsystem.hoodAngleFromVision());
             m_shootSubsystem.shoot(true);
-            m_drivetrain.drive(0, 0, rot, true);
+            m_drivetrain.drive(0, 0, rot, true, false);
     }
 
     public boolean isFinished() {
         if(!Objects.indexShooterSensor.get()) {
         m_shootSubsystem.shoot(false);
-        Objects.drivetrain.drive(0, 0, 0, true);
+        Objects.indexSubsystem.updateManual(false);
+        Objects.drivetrain.drive(0, 0, 0, true, false);
         //Motors.shooterLeader.stopMotor();
         //Motors.shooterFollower.stopMotor();
         }

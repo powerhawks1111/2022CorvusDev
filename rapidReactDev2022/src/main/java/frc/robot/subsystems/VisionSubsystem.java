@@ -31,9 +31,7 @@ public class VisionSubsystem extends SubsystemBase{
         validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean(false);
         SmartDashboard.putNumber("xAngle", xAngle);
         
-        SmartDashboard.putNumber("xPixy", Objects.pixyCamSubsystem.getPixyX(0));
 
-        SmartDashboard.putNumber("YPixy", Objects.pixyCamSubsystem.getPixyY(0));
 
         SmartDashboard.putNumber("yAngle", yAngle);
         
@@ -60,7 +58,7 @@ public class VisionSubsystem extends SubsystemBase{
      * @return Shooter RPM
      */
     public double rpmFromVision () {
-        return (0.680456 * Math.pow(yAngle, 2))-(31.10814 * yAngle) + (3985.7302); //c = 3845.73;
+        return (0.680456 * Math.pow(yAngle, 2))-(31.10814 * yAngle) + (4035.7302); //start of world 4035.7302 //c = 3845.73;
 
     }
 

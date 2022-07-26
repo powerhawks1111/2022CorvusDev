@@ -16,7 +16,7 @@ import frc.robot.variables.Objects;
 
 public class IndexSubsystem {
 
-    private double indexWheelSpeed = -0.55;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ; //speed scale for index wheel, needs to be negative
+    private double indexWheelSpeed = -0.5;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ; //speed scale for index wheel, needs to be negative
     boolean awaitingBall = false;
     //constructor
     private SparkMaxPIDController indexPID = Motors.indexLeader.getPIDController();
@@ -59,7 +59,7 @@ public class IndexSubsystem {
     public void backgroundIndex() {
         
         if (m_eject) {
-            driveIndexWheel(1);
+            driveIndexWheel(.5);
         } else if (m_manual) {
             driveIndexWheel(-1);
         }
@@ -70,21 +70,30 @@ public class IndexSubsystem {
             driveIndexWheel(indexWheelSpeed);
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
             
+            
             awaitingBall = true;
         } else if (Objects.indexShooterSensor.get() && awaitingBall) {
             awaitingBall = false;
             indexPID.setReference(currentPosition, ControlType.kPosition);
+            
         } else if (awaitingBall) {
             driveIndexWheel(indexWheelSpeed);
             currentPosition = Motors.indexLeader.getEncoder().getPosition();
         } else {
+            
             awaitingBall = false;
             indexPID.setReference(Motors.indexLeader.getEncoder().getPosition(), ControlType.kPosition);
             
             //indexPID.setReference(currentPosition, ControlType.kPosition);
         }
     }
-
+    /**
+     * Allows us to spool up
+     * @return boolean of spool
+     */
+    public boolean spoolUp() {
+        return Objects.indexShooterSensor.get();
+    }
     /**
      * Deprecated test function when initially testing motors
      */

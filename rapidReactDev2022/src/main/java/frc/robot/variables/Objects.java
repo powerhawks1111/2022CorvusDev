@@ -19,7 +19,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.MoveToSubsystem;
-import frc.robot.subsystems.PixyCamSubsystem;
+
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Compressor;
@@ -38,9 +38,9 @@ public class Objects {
     public static DoubleSolenoid intakePistonLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 2);
     public static DoubleSolenoid intakePistonRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 3);
     public static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
-    public static DigitalInput limitSwitch = new DigitalInput(2);
-    public static DigitalInput indexFirstSensor = new DigitalInput(0);
-    public static DigitalInput indexShooterSensor = new DigitalInput(1);
+    public static DigitalInput limitSwitch = new DigitalInput(21);
+    public static DigitalInput indexFirstSensor = new DigitalInput(19);
+    public static DigitalInput indexShooterSensor = new DigitalInput(20);
     public static Relay relay = new Relay(0, Direction.kReverse);
 
     /**
@@ -59,7 +59,7 @@ public class Objects {
     public static HoodSubsystem hoodSubsystem = new HoodSubsystem();
     public static VisionSubsystem visionSubsystem = new VisionSubsystem();
     public static IntakeAuto intakeAuto = new IntakeAuto();
-    public static PixyCamSubsystem pixyCamSubsystem = new PixyCamSubsystem();
+    
     
 
     public static Scheduler scheduler = new Scheduler();

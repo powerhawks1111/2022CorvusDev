@@ -10,9 +10,9 @@ public class MoveToCommand extends CommandBase {
     private final MoveToSubsystem m_moveToSubsystem;
 
     private double desiredX, desiredY, desiredHeading, translateSpeed, rotationSpeed, m_decelParam;
-    private boolean m_intake, m_pixy; 
+    private boolean m_intake;
 
-    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam, boolean intake, boolean pixy) {
+    public MoveToCommand(MoveToSubsystem moveToSubsystem, double desiredPositionX, double desiredPositionY, double heading, double strafeSpeed, double rotateSpeed, double decelParam, boolean intake) {
         m_moveToSubsystem = moveToSubsystem;
         desiredX = desiredPositionX;
         desiredY = desiredPositionY;
@@ -21,7 +21,6 @@ public class MoveToCommand extends CommandBase {
         rotationSpeed = rotateSpeed;
         m_decelParam = decelParam;
         m_intake = intake;
-        m_pixy = pixy;
         addRequirements(moveToSubsystem);
     }
     @Override
@@ -32,7 +31,9 @@ public class MoveToCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam, m_pixy);
+        m_moveToSubsystem.translateToPosition(desiredX, desiredY, desiredHeading, translateSpeed, m_decelParam);
+        Motors.shooterLeader.stopMotor();
+        Motors.shooterFollower.stopMotor();
         if (m_intake) {
             Objects.intakeSubsystem.extendIntake();
         } else {
@@ -42,11 +43,12 @@ public class MoveToCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_pixy == true && Objects.indexFirstSensor.get()){
-            m_moveToSubsystem.stopDriving();
-            return true;
+        if (m_moveToSubsystem.moveFinished()) {
+            Objects.driveSubsystem.driveSwerve(0, 0, 0, true, false);
         }
         return m_moveToSubsystem.moveFinished();
     }
+
+    
 
 }
